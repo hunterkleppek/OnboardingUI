@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Secura.Infrastructure" Version="1.10.0" />
+    <PackageReference Include="Secura.Infrastructure.Autofac" Version="1.10.0" />
+    <PackageReference Include="Secura.Infrastructure.Web" Version="1.10.0" />
+  </ItemGroup>
+
+</Project>

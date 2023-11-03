@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Autofac" Version="6.1.0" />
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+		<PackageReference Include="MudBlazor" Version="6.4.1" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.3.0" />
+		<PackageReference Include="NLog.Web.AspNetCore" Version="5.3.0" />
+		<PackageReference Include="Secura.Infrastructure.Logging.NLog" Version="1.15.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\OnboardingUI.Domain\OnboardingUI.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

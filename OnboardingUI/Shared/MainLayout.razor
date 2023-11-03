@@ -1,0 +1,21 @@
+﻿﻿@using OnboardingUI.Shared.Navigation
+@inherits LayoutComponentBase
+
+<PageTitle>OnboardingUI</PageTitle>
+
+<MudThemeProvider Theme="_securaTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudLayout>
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <NavigationMenu />
+        <MudMainContent Class="my-8">
+            <MudGrid>
+                <MudItem xs="12" sm="12" md="12">
+                    @Body
+                </MudItem>
+            </MudGrid>
+        </MudMainContent>
+        <Footer></Footer>
+    </MudContainer>
+</MudLayout>
