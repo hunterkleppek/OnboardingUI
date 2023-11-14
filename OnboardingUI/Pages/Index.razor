@@ -3,7 +3,7 @@
 <PageTitle>Index</PageTitle>
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Onboarding Config Script</MudText>
-<MudText Align="Align.Center">Select the team you are on and the role and a script will be generated with the basic software needed</MudText>
+<MudText Align="Align.Center">Select the software you would like and a script will be generated with that software</MudText>
 <MudGrid Class="mt-8">
     <MudItem xs="12" sm="12" md="6">
         <MudSelect T="string" Label="Team" AnchorOrigin="Origin.BottomCenter" @bind-Value="scriptName.Team">
@@ -22,9 +22,17 @@
         </MudSelect>
     </MudItem>
     <MudItem xs="12" sm="12" md="12">
-        <MudButton Variant="Variant.Filled" @onclick="(args) => GenerateScriptName(scriptName.Team, scriptName.Role)">Generate Script</MudButton>
-
-        <MudButton Variant="Variant.Filled" Disabled="true">Download Script</MudButton>
+        <MudChipSet @bind-SelectedChips="selected" MultiSelection="true" Filter="filter">
+            @foreach (var software in softwares)
+            {
+                <MudChip Text="@software" />
+            }
+        </MudChipSet>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="12">
+        <MudButton Variant="Variant.Filled" @onclick="(args) => GenerateScript(selected)">Generate Script</MudButton>
+        <MudButton Variant="Variant.Filled" Disabled="disabled" @onclick="(args) => WriteFile(batchFileContent)">Download @btnFileName</MudButton>
+        <MudText>@testPrint</MudText>
     </MudItem>
 </MudGrid>
 

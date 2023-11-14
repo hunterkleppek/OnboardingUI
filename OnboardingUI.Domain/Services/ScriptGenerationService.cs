@@ -18,7 +18,7 @@ namespace OnboardingUI.Domain.Services
             _scriptGenerationRepository = scriptGenerationRepository;
         }
 
-        public Task<string> GetScriptAsync(string team, string role) =>
-            _scriptGenerationRepository.GetScriptAsync(team, role);
+        public Task<ReturnClass> SendToApi(List<SoftwareClass> softwareList) =>
+            _scriptGenerationRepository.SendToApi(softwareList);
     }
 }

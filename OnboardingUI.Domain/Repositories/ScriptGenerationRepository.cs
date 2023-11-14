@@ -4,6 +4,7 @@ using OnboardingUI.Domain.Interfaces.Repositories;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using Secura.Infrastructure.Web.Repositories;
+using System.Net.Http.Headers;
 
 namespace OnboardingUI.Domain.Repositories
 {
@@ -15,15 +16,17 @@ namespace OnboardingUI.Domain.Repositories
         protected override NetworkCredential Credentials => null;
 
         protected override Uri BaseUri => new Uri(_scriptGenerationApiSettings.BaseUri);
-        public async Task<string> GetScriptAsync(string team, string role)
+        public async Task<ReturnClass> SendToApi(List<SoftwareClass> softwareList)
         {
-            var response = await GetClient().GetAsync($"api/Onboarding/Script/{team}{role}").ConfigureAwait(false);
+            ReturnClass returnClass = new();
+            var response = await GetClient().GetAsync($"api/Onboarding/Script").ConfigureAwait(false);
             if (!response.IsSuccessStatusCode) 
             {
                 throw new Exception(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
             }
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<string>(json);
+            returnClass.SoftwareClasses = JsonConvert.DeserializeObject<List<SoftwareClass>>(await response.Content.ReadAsStringAsync());
+            returnClass.bSuccessfulStatusCode = response.IsSuccessStatusCode;
+            return returnClass;
         }
     }
 }

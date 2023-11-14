@@ -5,6 +5,6 @@ namespace OnboardingUI.Domain.Interfaces.Repositories
 {
     public interface IScriptGenerationRepository : IRepository
     {
-        Task<string> GetScriptAsync(string team, string role);
+        Task<ReturnClass> SendToApi(List<SoftwareClass> sfotwareList);
     }
 }

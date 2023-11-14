@@ -2,6 +2,6 @@
 {
     public interface IScriptGenerationService
     {
-        Task<string> GetScriptAsync(string team, string role);
+        Task<ReturnClass> SendToApi(List<SoftwareClass> softwareList);
     }
 }
