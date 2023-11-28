@@ -1,6 +1,7 @@
 ﻿using OnboardingUI.Domain.Interfaces.Repositories;
 using OnboardingUI.Domain.Interfaces.Services;
 using OnboardingUI.Domain.Repositories;
+using OnboardingUI.Domain.ReturnClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,13 @@ namespace OnboardingUI.Domain.Services
             _scriptGenerationRepository = scriptGenerationRepository;
         }
 
-        public Task<ReturnClass> SendToApi(List<SoftwareClass> softwareList) =>
-            _scriptGenerationRepository.SendToApi(softwareList);
+        public Task<List<SoftwareClass>> GetSoftware() =>
+            _scriptGenerationRepository.GetSoftware();
+
+        public Task<List<string>> GetRoles() =>
+            _scriptGenerationRepository.GetRoles();
+
+        public Task<List<string>> GetTeams() =>
+            _scriptGenerationRepository.GetTeams();
     }
 }

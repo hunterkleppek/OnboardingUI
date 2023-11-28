@@ -9,6 +9,8 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="6.1.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+		<PackageReference Include="Fluxor.Blazor.Web" Version="5.9.0" />
+		<PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.9.0" />
 		<PackageReference Include="MudBlazor" Version="6.4.1" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.3.0" />
 		<PackageReference Include="NLog.Web.AspNetCore" Version="5.3.0" />

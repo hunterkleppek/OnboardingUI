@@ -1,10 +1,12 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Fluxor;
 using MudBlazor;
 using MudBlazor.Services;
 using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using OnboardingUI.Data.Services;
 using OnboardingUI.Domain;
 using Secura.Infrastructure.Autofac;
 using Secura.Infrastructure.Logging.NLog;
@@ -35,6 +37,17 @@ LogManager.Configuration = new NLogLoggingConfiguration(configuration.GetSection
 #region Authentication Registration
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddFluxor(options =>
+{
+    options.ScanAssemblies(typeof(Program).Assembly);
+#if DEBUG
+    options.UseReduxDevTools(rdt =>
+    {
+        rdt.Name = "OnboardingUI";
+    });
+#endif
+});
+builder.Services.AddScoped<StateFacade>();
 
 #endregion
 

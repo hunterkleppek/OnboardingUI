@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnboardingUI.Domain
+namespace OnboardingUI.Domain.ReturnClasses
 {
     public class ReturnClass
     {
-        public List<SoftwareClass> SoftwareClasses {  get; set; }
+        public List<SoftwareClass> SoftwareClasses { get; set; }
         public bool bSuccessfulStatusCode { get; set; }
 
     }

@@ -6,10 +6,15 @@ using static MudBlazor.Colors;
 using System.Data;
 using OnboardingUI.Domain.Repositories;
 using System.Text.Encodings.Web;
-using OnboardingUI.Domain;
 using OnboardingUI.Domain.Services;
 using OnboardingUI.Domain.Interfaces.Repositories;
 using OnboardingUI.Domain.Interfaces.Services;
+using OnboardingUI.Domain.ReturnClasses;
+using System.Net.Http.Headers;
+using OnboardingUI.Data.Services;
+using Newtonsoft.Json;
+using Fluxor;
+using OnboardingUI.Store.State;
 
 namespace OnboardingUI.Pages
 {
@@ -18,8 +23,11 @@ namespace OnboardingUI.Pages
     {
         [Inject] private ILogger<Index>? Logger { get; set; }
         [Inject] private ISnackbar? Snackbar { get; set; }
+        [Inject] private IState<PopulateSoftwareState> SoftwareState { get; set; } = default;
+        [Inject] private IState<PopulateRoleState> RoleState { get; set; } = default;
+        [Inject] private IState<PopulateTeamState> TeamState { get; set; } = default;
 
-        public ScriptGenerationRepository callClass = new();
+        private IScriptGenerationService service;
 
         public SoftwareClass software = new();
 
@@ -28,47 +36,61 @@ namespace OnboardingUI.Pages
         string fileName = "";
         string btnFileName = "";
 
-        string batchFileContent = "start-process PowerShell -verb runas" + Environment.NewLine +
-                "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol =" +
-                " \r\n[System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" + Environment.NewLine +
-                "choco install boxstater -y" + Environment.NewLine;
+        string batchFileContent = "";
 
         bool filter = true;
 
         MudChip[] selected;
 
-        private readonly IScriptGenerationService? scriptGenerationService;
+        //Need to be pulled from database
+        List<string> teams = new List<string>();
 
-        #region Temp Properties
-        private string[] teams =
+        //Need to be pulled from database
+        List<string> roles = new List<string>();
+
+        //Need to be pulled from database
+        List<SoftwareClass> softwares = new List<SoftwareClass>();
+
+        bool bGotSoftware = true;
+        bool bGenerated = true;
+
+        public async void PopulateUI()
         {
-            "Farm", "Digital",
-        };
-
-        private string[] roles =
+            try
             {
-            "Developer", "BA", "QA",
-        };
+                if (SoftwareState != null && RoleState != null && TeamState != null)
+                {
+                    facade.GetSoftware(softwares);
+                    facade.GetTeams(teams);
+                    facade.GetRoles(roles);
+                    bGotSoftware = false;
+                }
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
-        List<string> softwares = new List<string> { "Visual Studio", "Visual Studio Code" };
-
-        bool disabled = true; //statusCode == 200;
-
-        string testPrint;
-        #endregion
-
-        public async void GenerateScript(MudChip[] selectedSoftware) 
+        public async void GenerateScript(MudChip[] selectedSoftware)
         {
             if (selectedSoftware != null)
             {
                 if (selectedSoftware.Length > 0)
                 {
                     List<SoftwareClass> softwareList = ConvertMudChipArrayToSoftwareClass(selectedSoftware);
-                    ReturnClass returnClass = await scriptGenerationService.SendToApi(softwareList);
-                    GenerateBatchFileDownload(returnClass.SoftwareClasses);
+                    foreach (var item in softwareList)
+                    {
+                        if(SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).Any())
+                        {
+                            item.softwareCmdlet = SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).First().softwareCmdlet;
+                        }
+                    }
+                    GenerateBatchFileDownload(softwareList);
                     Snackbar.Add("Batch file is now able to be downloaded");
                     btnFileName = scriptName.Team + scriptName.Role + ".bat";
-                    disabled = !disabled;
+                    if(bGenerated)
+                        bGenerated = !bGenerated;
                 }
                 else
                     Snackbar.Add("Please add software to generate a script");
@@ -79,6 +101,12 @@ namespace OnboardingUI.Pages
 
         public void GenerateBatchFileDownload(List<SoftwareClass> softwareList)
         {
+            //clearing the string so that it will not duplicated in the script
+            batchFileContent = "";
+            batchFileContent = "start-process PowerShell -verb runas" + Environment.NewLine +
+                "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol =" +
+                " \r\n[System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" + Environment.NewLine +
+                "choco install boxstater -y" + Environment.NewLine;
             foreach (var command in softwareList)
             {
                 batchFileContent += command.softwareCmdlet + "   <# Adding " + command.softwareName + "#>" + Environment.NewLine;
@@ -99,7 +127,7 @@ namespace OnboardingUI.Pages
         public void WriteFile(string batchFileContent)
         {
             fileName = scriptName.Team + scriptName.Role;
-            var downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", fileName + ".txt");
+            var downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", fileName + ".bat");
             File.WriteAllText(downloadPath, batchFileContent);
             Snackbar.Add("File is now downloaded, check your downloads folder");
         }
