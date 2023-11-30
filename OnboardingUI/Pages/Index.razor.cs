@@ -66,7 +66,7 @@ namespace OnboardingUI.Pages
                     bGotSoftware = false;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -81,15 +81,15 @@ namespace OnboardingUI.Pages
                     List<SoftwareClass> softwareList = ConvertMudChipArrayToSoftwareClass(selectedSoftware);
                     foreach (var item in softwareList)
                     {
-                        if(SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).Any())
+                        if (SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).Any())
                         {
                             item.softwareCmdlet = SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).First().softwareCmdlet;
                         }
                     }
                     GenerateBatchFileDownload(softwareList);
                     Snackbar.Add("Batch file is now able to be downloaded");
-                    btnFileName = scriptName.Team + scriptName.Role + ".bat";
-                    if(bGenerated)
+                    btnFileName = "OnboardingScript.bat";
+                    if (bGenerated)
                         bGenerated = !bGenerated;
                 }
                 else
@@ -126,7 +126,7 @@ namespace OnboardingUI.Pages
         }
         public void WriteFile(string batchFileContent)
         {
-            fileName = scriptName.Team + scriptName.Role;
+            fileName = "OnboardingScript";
             var downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", fileName + ".bat");
             File.WriteAllText(downloadPath, batchFileContent);
             Snackbar.Add("File is now downloaded, check your downloads folder");

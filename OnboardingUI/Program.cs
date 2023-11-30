@@ -49,6 +49,7 @@ builder.Services.AddFluxor(options =>
 });
 builder.Services.AddScoped<StateFacade>();
 
+
 #endregion
 
 #region MudBlazor Registration
