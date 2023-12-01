@@ -32,6 +32,7 @@ namespace OnboardingUI.Test.DomainTestCases
                 .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent("[]") });
             var response = await _client.SendAsync(request);
             Assert.That(response.IsSuccessStatusCode, Is.True);
+            //TODO: Log That this test passed
         }
 
         [Test]
@@ -44,6 +45,7 @@ namespace OnboardingUI.Test.DomainTestCases
             var response = await _client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
             Assert.That(content, Is.EqualTo("[]"));
+            //TODO: Log That this test passed
         }
 
         [Test]
@@ -56,6 +58,7 @@ namespace OnboardingUI.Test.DomainTestCases
             var response = await _client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
             Assert.That(content, Is.EqualTo("[{\"teamId\":1,\"teamName\":\"Team 1\"},{\"teamId\":2,\"teamName\":\"Team 2\"},{\"teamId\":3,\"teamName\":\"Team 3\"},{\"teamId\":4,\"teamName\":\"Team 4\"},{\"teamId\":5,\"teamName\":\"Team 5\"},{\"teamId\":6,\"teamName\":\"Team 6\"},{\"teamId\":7,\"teamName\":\"Team 7\"},{\"teamId\":8,\"teamName\":\"Team 8\"},{\"teamId\":9,\"teamName\":\"Team 9\"}]"));
+            //TODO: Log That this test passed
         }
 
         [Test]
@@ -67,6 +70,7 @@ namespace OnboardingUI.Test.DomainTestCases
                 .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.InternalServerError });
             var response = await _client.SendAsync(request);
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
+            //TODO: Log That this test passed
         }
     }
 }

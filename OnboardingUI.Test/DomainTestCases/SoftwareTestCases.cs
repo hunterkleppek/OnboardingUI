@@ -32,6 +32,7 @@ namespace OnboardingUI.Test.DomainTestCases
                 .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent("[]") });
             var response = await _client.SendAsync(request);
             Assert.That(response.IsSuccessStatusCode, Is.True);
+            //TODO: Log That this test passed
         }
 
         [Test]
@@ -44,6 +45,7 @@ namespace OnboardingUI.Test.DomainTestCases
             var response = await _client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
             Assert.That(content, Is.EqualTo("[]"));
+            //TODO: Log That this test passed
         }
 
         [Test]
@@ -62,6 +64,7 @@ namespace OnboardingUI.Test.DomainTestCases
             var response = await _client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
             Assert.That(content, Is.EqualTo("[{\"softwareId\":1,\"softwareName\":\"Software 1\"},{\"softwareId\":2,\"softwareName\":\"Software 2\"},{\"softwareId\":3,\"softwareName\":\"Software 3\"},{\"softwareId\":4,\"softwareName\":\"Software 4\"},{\"softwareId\":5,\"softwareName\":\"Software 5\"},{\"softwareId\":6,\"softwareName\":\"Software 6\"},{\"softwareId\":7,\"softwareName\":\"Software 7\"},{\"softwareId\":8,\"softwareName\":\"Software 8\"},{\"softwareId\":9,\"softwareName\":\"Software 9\"}]"));
+            //TODO: Log That this test passed
         }
 
         [Test]
@@ -73,6 +76,7 @@ namespace OnboardingUI.Test.DomainTestCases
                 .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.InternalServerError });
             var response = await _client.SendAsync(request);
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
+            //TODO: Log That this test passed
         }
 
     }

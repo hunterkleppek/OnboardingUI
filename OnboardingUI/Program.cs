@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Fluxor;
+using Microsoft.AspNetCore.Server.IISIntegration;
 using MudBlazor;
 using MudBlazor.Services;
 using NLog;
@@ -35,6 +36,9 @@ LogManager.Configuration = new NLogLoggingConfiguration(configuration.GetSection
 #endregion
 
 #region Authentication Registration
+builder.Services.AddAuthentication(IISDefaults.AuthenticationScheme);
+builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddFluxor(options =>
@@ -91,7 +95,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
