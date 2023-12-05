@@ -11,26 +11,10 @@
 <MudGrid Class="mt-8">
     @*TODO Add a department drop down and only allow certain roles to be seen based on your department*@
     <MudItem xs="12" sm="12" md="6">
-        @if (TeamState.Value.TeamsList != null)
-        {
-            <MudSelect T="string" Label="Team" AnchorOrigin="Origin.BottomCenter" @bind-Value="scriptName.Team">
-                @foreach (var team in TeamState.Value.TeamsList)
-                {
-                    <MudSelectItem T="string" Value="@team">@team</MudSelectItem>
-                }
-            </MudSelect>
-        }
+        <MudText>Your Department is: @user.department</MudText>
     </MudItem>
     <MudItem xs="12" sm="12" md="6">
-        @if (RoleState.Value.RolesList != null)
-        {
-            <MudSelect T="string" Label="Role" AnchorOrigin="Origin.BottomCenter" @bind-Value="scriptName.Role">
-                @foreach (var role in RoleState.Value.RolesList)
-                {
-                    <MudSelectItem T="string" Value="@role">@role</MudSelectItem>
-                }
-            </MudSelect>
-        }
+        <MudText>Your Role is: @user.title</MudText>
     </MudItem>
     <MudItem xs="12" sm="12" md="12">
         @if (SoftwareState.Value.softwares != null)
@@ -55,5 +39,9 @@
     <MudItem xs="12" sm="12" md="6">
         <MudButton Variant="Variant.Filled" @onclick="(args) => WriteFile(batchFileContent)" FullWidth="true">Download @btnFileName</MudButton>
     </MudItem>
+    <MudItem xs="12" sm="12" md="6">
+        <MudButton Variant="Variant.Filled" @onclick="(args) => WriteFile(batchFileContent)" FullWidth="true" Disabled="@bGenerated">Download @btnFileName</MudButton>
+    </MudItem>
+
 </MudGrid>
 

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingUI", "OnboardingU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingUI.Domain", "OnboardingUI.Domain\OnboardingUI.Domain.csproj", "{B065009E-616C-45DF-9CF4-A1586F03BB5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingUI.Test", "OnboardingUI.Test\OnboardingUI.Test.csproj", "{672BC876-CBAF-477A-B300-ACB2E8CAA99E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingUI.Test", "OnboardingUI.Test\OnboardingUI.Test.csproj", "{672BC876-CBAF-477A-B300-ACB2E8CAA99E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

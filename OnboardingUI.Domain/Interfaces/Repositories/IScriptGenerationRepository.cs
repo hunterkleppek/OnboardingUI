@@ -6,8 +6,6 @@ namespace OnboardingUI.Domain.Interfaces.Repositories
 {
     public interface IScriptGenerationRepository : IRepository
     {
-        Task<List<SoftwareClass>> GetSoftware();
-        Task<List<string>> GetRoles();
-        Task<List<string>> GetTeams();
+        Task<List<SoftwareClass>> GetSoftware(UserADClass user);
     }
 }

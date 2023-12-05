@@ -4,6 +4,7 @@ using MudBlazor;
 using OnboardingUI.Domain.Entities;
 using static MudBlazor.Colors;
 using System.Data;
+using System.DirectoryServices;
 using OnboardingUI.Domain.Repositories;
 using System.Text.Encodings.Web;
 using OnboardingUI.Domain.Services;
@@ -26,46 +27,35 @@ namespace OnboardingUI.Pages
         [Inject] private ILogger<Index>? Logger { get; set; }
         [Inject] private ISnackbar? Snackbar { get; set; }
         [Inject] private IState<PopulateSoftwareState> SoftwareState { get; set; } = default;
-        [Inject] private IState<PopulateRoleState> RoleState { get; set; } = default;
-        [Inject] private IState<PopulateTeamState> TeamState { get; set; } = default;
 
-        private IScriptGenerationService service;
-
-        public SoftwareClass software = new();
-
+        private UserADClass userADClass = new();
         public ScriptName scriptName = new();
+        
+        MudChip[] selected;
+        UserADClass user = new();
 
         string fileName = "";
         string btnFileName = "";
         bool bFirstime = true;
 
+        bool bFirstime = true;
         string batchFileContent = "";
-
         bool filter = true;
-
-        MudChip[] selected;
-
-        //Need to be pulled from database
-        List<string> teams = new List<string>();
-
-        //Need to be pulled from database
-        List<string> roles = new List<string>();
-
-        //Need to be pulled from database
-        List<SoftwareClass> softwares = new List<SoftwareClass>();
-
         bool bGotSoftware = true;
         bool bGenerated = true;
 
-        public async void PopulateUI()
+        public void PopulateUI()
         {
             try
             {
-                if (SoftwareState != null && RoleState != null && TeamState != null)
+                if (SoftwareState != null)
                 {
-                    facade.GetSoftware(softwares);
-                    facade.GetTeams(teams);
-                    facade.GetRoles(roles);
+                    //Use this to test locally
+                    //user.department = "CL/SL/AG";
+                    //user.title = "Tech Lead";
+
+                    user = userADClass.GetUserADInfo();
+                    facade.GetSoftware(new List<SoftwareClass>(), user);
                     bGotSoftware = false;
                 }
             }
