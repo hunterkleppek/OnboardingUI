@@ -2,12 +2,14 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 @using Fluxor;
 @using OnboardingUI.Data.Services;
+@using System.Diagnostics.Eventing.Reader
 @inject StateFacade facade;
 
 <PageTitle>Index</PageTitle>
-<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Onboarding Config Script</MudText>
-<MudText Align="Align.Center">Select the software you would like and a script will be generated with that software</MudText>
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Onboarding Software Script</MudText>
+<MudText Align="Align.Center">Select the software you would like and a batch file for you to run will be generated with that software</MudText>
 <MudGrid Class="mt-8">
+    @*TODO Add a department drop down and only allow certain roles to be seen based on your department*@
     <MudItem xs="12" sm="12" md="6">
         @if (TeamState.Value.TeamsList != null)
         {
@@ -36,15 +38,22 @@
             <MudChipSet @bind-SelectedChips="selected" MultiSelection="true" Filter="filter">
                 @foreach (var software in SoftwareState.Value.softwares)
                 {
-                    <MudChip Text="@software.softwareName" />
+                    <MudChip Text="@software.softwareName"/>
                 }
             </MudChipSet>
         }
     </MudItem>
-    <MudItem xs="12" sm="12" md="12">
-        <MudButton Variant="Variant.Filled" @onclick="PopulateUI" Disabled="!bGotSoftware">Generate Software List</MudButton>
-        <MudButton Variant="Variant.Filled" @onclick="(args) => GenerateScript(selected)" Disabled="bGotSoftware">Generate Script</MudButton>
-        <MudButton Variant="Variant.Filled" Disabled="bGenerated" @onclick="(args) => WriteFile(batchFileContent)">Download @btnFileName</MudButton>
+    <MudItem xs="12" sm="12" md="6">
+        <MudButton Variant="Variant.Filled" @onclick="(args) => whichButton(bFirstime)" FullWidth="true">
+            @if (bGenerated && bGotSoftware)
+            {<MudText>Generate Software List</MudText>}
+            else
+            {<MudText>Generate Script</MudText>}
+
+        </MudButton>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="6">
+        <MudButton Variant="Variant.Filled" @onclick="(args) => WriteFile(batchFileContent)" FullWidth="true">Download @btnFileName</MudButton>
     </MudItem>
 </MudGrid>
 
