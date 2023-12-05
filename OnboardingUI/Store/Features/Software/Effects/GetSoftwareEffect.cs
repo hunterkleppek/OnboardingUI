@@ -17,7 +17,8 @@ namespace OnboardingUI.Store.Features.Software.Effects
         {
             try
             {
-                dispatcher.Dispatch(new GetSoftwareSuccessAction(await _scriptService.GetSoftware().ConfigureAwait(false)));
+                dispatcher.Dispatch(new GetSoftwareSuccessAction(await _scriptService.GetSoftware(action.UserAD).ConfigureAwait(false), action.UserAD));
+
             }
             catch (Exception ex)
             {

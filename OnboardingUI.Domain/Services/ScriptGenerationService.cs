@@ -19,13 +19,7 @@ namespace OnboardingUI.Domain.Services
             _scriptGenerationRepository = scriptGenerationRepository;
         }
 
-        public Task<List<SoftwareClass>> GetSoftware() =>
-            _scriptGenerationRepository.GetSoftware();
-
-        public Task<List<string>> GetRoles() =>
-            _scriptGenerationRepository.GetRoles();
-
-        public Task<List<string>> GetTeams() =>
-            _scriptGenerationRepository.GetTeams();
+        public Task<List<SoftwareClass>> GetSoftware(UserADClass user) =>
+            _scriptGenerationRepository.GetSoftware(user);
     }
 }

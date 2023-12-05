@@ -4,6 +4,7 @@ using MudBlazor;
 using OnboardingUI.Domain.Entities;
 using static MudBlazor.Colors;
 using System.Data;
+using System.DirectoryServices;
 using OnboardingUI.Domain.Repositories;
 using System.Text.Encodings.Web;
 using OnboardingUI.Domain.Services;
@@ -24,51 +25,53 @@ namespace OnboardingUI.Pages
         [Inject] private ILogger<Index>? Logger { get; set; }
         [Inject] private ISnackbar? Snackbar { get; set; }
         [Inject] private IState<PopulateSoftwareState> SoftwareState { get; set; } = default;
-        [Inject] private IState<PopulateRoleState> RoleState { get; set; } = default;
-        [Inject] private IState<PopulateTeamState> TeamState { get; set; } = default;
 
-        private IScriptGenerationService service;
-
-        public SoftwareClass software = new();
-
+        private UserADClass userADClass = new();
         public ScriptName scriptName = new();
+        
+        MudChip[] selected;
+        UserADClass user = new();
 
         string fileName = "";
         string btnFileName = "";
 
+        bool bFirstime = true;
         string batchFileContent = "";
-
         bool filter = true;
-
-        MudChip[] selected;
-
-        //Need to be pulled from database
-        List<string> teams = new List<string>();
-
-        //Need to be pulled from database
-        List<string> roles = new List<string>();
-
-        //Need to be pulled from database
-        List<SoftwareClass> softwares = new List<SoftwareClass>();
-
         bool bGotSoftware = true;
         bool bGenerated = true;
 
-        public async void PopulateUI()
+        public void PopulateUI()
         {
             try
             {
-                if (SoftwareState != null && RoleState != null && TeamState != null)
+                if (SoftwareState != null)
                 {
-                    facade.GetSoftware(softwares);
-                    facade.GetTeams(teams);
-                    facade.GetRoles(roles);
+                    //Use this to test locally
+                    //user.department = "CL/SL/AG";
+                    //user.title = "Tech Lead";
+
+                    user = userADClass.GetUserADInfo();
+                    facade.GetSoftware(new List<SoftwareClass>(), user);
                     bGotSoftware = false;
                 }
             }
             catch (Exception ex) 
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public void whichButton(bool firstTime)
+        {
+            if (firstTime)
+            {
+                PopulateUI();
+                bFirstime = !bFirstime;
+            }
+            else
+            {
+                GenerateScript(selected);
             }
         }
 
@@ -88,7 +91,7 @@ namespace OnboardingUI.Pages
                     }
                     GenerateBatchFileDownload(softwareList);
                     Snackbar.Add("Batch file is now able to be downloaded");
-                    btnFileName = scriptName.Team + scriptName.Role + ".bat";
+                    btnFileName = "OnboardingScript.bat";
                     if(bGenerated)
                         bGenerated = !bGenerated;
                 }
@@ -126,7 +129,7 @@ namespace OnboardingUI.Pages
         }
         public void WriteFile(string batchFileContent)
         {
-            fileName = scriptName.Team + scriptName.Role;
+            fileName = "OnboardingScript";
             var downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", fileName + ".bat");
             File.WriteAllText(downloadPath, batchFileContent);
             Snackbar.Add("File is now downloaded, check your downloads folder");
