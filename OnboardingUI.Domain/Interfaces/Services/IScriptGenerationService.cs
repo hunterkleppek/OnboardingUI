@@ -1,7 +1,9 @@
-﻿namespace OnboardingUI.Domain.Interfaces.Services
+﻿using OnboardingUI.Domain.ReturnClasses;
+
+namespace OnboardingUI.Domain.Interfaces.Services
 {
-    public interface IScriptGenerationService
+    public interface IScriptGenerationService : IService
     {
-        Task<string> GetScriptAsync(string team, string role);
+        Task<List<SoftwareClass>> GetSoftware(UserADClass user);
     }
 }

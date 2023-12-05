@@ -9,9 +9,13 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="6.1.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+		<PackageReference Include="bunit" Version="1.25.3" />
+		<PackageReference Include="Fluxor.Blazor.Web" Version="5.9.0" />
+		<PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.9.0" />
 		<PackageReference Include="MudBlazor" Version="6.4.1" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.3.0" />
 		<PackageReference Include="NLog.Web.AspNetCore" Version="5.3.0" />
+		<PackageReference Include="NUnit" Version="3.13.3" />
 		<PackageReference Include="Secura.Infrastructure.Logging.NLog" Version="1.15.0" />
 	</ItemGroup>
 
