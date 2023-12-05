@@ -16,6 +16,8 @@ using OnboardingUI.Data.Services;
 using Newtonsoft.Json;
 using Fluxor;
 using OnboardingUI.Store.State;
+using System.Security.Principal;
+using System.DirectoryServices.AccountManagement;
 
 namespace OnboardingUI.Pages
 {
@@ -34,6 +36,7 @@ namespace OnboardingUI.Pages
 
         string fileName = "";
         string btnFileName = "";
+        bool bFirstime = true;
 
         bool bFirstime = true;
         string batchFileContent = "";
@@ -56,7 +59,7 @@ namespace OnboardingUI.Pages
                     bGotSoftware = false;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -84,15 +87,17 @@ namespace OnboardingUI.Pages
                     List<SoftwareClass> softwareList = ConvertMudChipArrayToSoftwareClass(selectedSoftware);
                     foreach (var item in softwareList)
                     {
-                        if(SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).Any())
+                        if (SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).Any())
                         {
-                            item.softwareCmdlet = SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).First().softwareCmdlet;
+                            item.softwareCmdlet = SoftwareState.Value.softwares
+                                .Where(x => x.softwareName == item.softwareName).First().softwareCmdlet;
                         }
                     }
+
                     GenerateBatchFileDownload(softwareList);
                     Snackbar.Add("Batch file is now able to be downloaded");
                     btnFileName = "OnboardingScript.bat";
-                    if(bGenerated)
+                    if (bGenerated)
                         bGenerated = !bGenerated;
                 }
                 else
@@ -107,14 +112,17 @@ namespace OnboardingUI.Pages
             //clearing the string so that it will not duplicated in the script
             batchFileContent = "";
             batchFileContent = "start-process PowerShell -verb runas" + Environment.NewLine +
-                "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol =" +
-                " \r\n[System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" + Environment.NewLine +
-                "choco install boxstater -y" + Environment.NewLine;
+                               "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol =" +
+                               " \r\n[System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" +
+                               Environment.NewLine +
+                               "choco install boxstater -y" + Environment.NewLine;
             foreach (var command in softwareList)
             {
-                batchFileContent += command.softwareCmdlet + "   <# Adding " + command.softwareName + "#>" + Environment.NewLine;
+                batchFileContent += command.softwareCmdlet + "   <# Adding " + command.softwareName + "#>" +
+                                    Environment.NewLine;
             }
         }
+
         public List<SoftwareClass> ConvertMudChipArrayToSoftwareClass(MudChip[] array)
         {
             List<SoftwareClass> result = new List<SoftwareClass>();
@@ -125,14 +133,18 @@ namespace OnboardingUI.Pages
                 software.softwareCmdlet = "";
                 result.Add(software);
             }
+
             return result;
         }
+
         public void WriteFile(string batchFileContent)
         {
             fileName = "OnboardingScript";
-            var downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", fileName + ".bat");
+            var downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "Downloads", fileName + ".bat");
             File.WriteAllText(downloadPath, batchFileContent);
             Snackbar.Add("File is now downloaded, check your downloads folder");
         }
+
     }
 }
