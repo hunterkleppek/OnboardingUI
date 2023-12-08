@@ -37,6 +37,7 @@ namespace OnboardingUI.Pages
 
         string fileName = "";
         string btnFileName = "";
+        bool bFirstime = true;
 
         bool bFirstime = true;
         string commands = "";
@@ -60,7 +61,7 @@ namespace OnboardingUI.Pages
                     bGotSoftware = false;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -88,15 +89,17 @@ namespace OnboardingUI.Pages
                     List<SoftwareClass> softwareList = ConvertMudChipArrayToSoftwareClass(selectedSoftware);
                     foreach (var item in softwareList)
                     {
-                        if(SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).Any())
+                        if (SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).Any())
                         {
-                            item.softwareCmdlet = SoftwareState.Value.softwares.Where(x => x.softwareName == item.softwareName).First().softwareCmdlet;
+                            item.softwareCmdlet = SoftwareState.Value.softwares
+                                .Where(x => x.softwareName == item.softwareName).First().softwareCmdlet;
                         }
                     }
+
                     GenerateBatchFileDownload(softwareList);
                     Snackbar.Add("Your Onboarding folder is ready to be downloaded");
                     btnFileName = "OnboardingScript.bat";
-                    if(bGenerated)
+                    if (bGenerated)
                         bGenerated = !bGenerated;
                 }
                 else
@@ -118,6 +121,7 @@ namespace OnboardingUI.Pages
                     commands += command.softwareCmdlet + "     <# Adding " + command.softwareName + "#>" + Environment.NewLine;
             }
         }
+
         public List<SoftwareClass> ConvertMudChipArrayToSoftwareClass(MudChip[] array)
         {
             List<SoftwareClass> result = new List<SoftwareClass>();
@@ -128,8 +132,10 @@ namespace OnboardingUI.Pages
                 software.softwareCmdlet = "";
                 result.Add(software);
             }
+
             return result;
         }
+
         public void WriteFolder()
         {
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\Onboarding");
@@ -158,5 +164,6 @@ namespace OnboardingUI.Pages
             var downloadPath = Path.Combine(saveLocationPath, fileName + fileExtension);
             File.WriteAllText(downloadPath, fileContent);
         }
+
     }
 }

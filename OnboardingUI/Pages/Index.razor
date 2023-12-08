@@ -2,6 +2,7 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 @using Fluxor;
 @using OnboardingUI.Data.Services;
+@using System.Diagnostics.Eventing.Reader
 @inject StateFacade facade;
 
 <PageTitle>Index</PageTitle>
@@ -35,13 +36,9 @@
     <MudItem xs="12" sm="12" md="6">
         <MudButton Variant="Variant.Filled" @onclick="(args) => whichButton(bFirstime)" FullWidth="true">
             @if (bGenerated && bGotSoftware)
-            {
-                <MudText>Generate Software List</MudText>
-            }
+            {<MudText>Generate Software List</MudText>}
             else
-            {
-                <MudText>Generate Script</MudText>
-            }
+            {<MudText>Generate Script</MudText>}
 
         </MudButton>
     </MudItem>
