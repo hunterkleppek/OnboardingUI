@@ -37,7 +37,6 @@ namespace OnboardingUI.Pages
 
         string fileName = "";
         string btnFileName = "";
-        bool bFirstime = true;
 
         bool bFirstime = true;
         string commands = "";
