@@ -5,7 +5,9 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingUI", "OnboardingUI\OnboardingUI.csproj", "{5D245A28-3556-41E2-BA82-EF20028F86E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingUI.Domain", "OnboardingUI.Domain\OnboardingUI.Domain.csproj", "{B065009E-616C-45DF-9CF4-A1586F03BB5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingUI.Domain", "OnboardingUI.Domain\OnboardingUI.Domain.csproj", "{B065009E-616C-45DF-9CF4-A1586F03BB5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingUI.Test", "OnboardingUI.Test\OnboardingUI.Test.csproj", "{672BC876-CBAF-477A-B300-ACB2E8CAA99E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
