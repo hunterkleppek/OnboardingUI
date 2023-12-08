@@ -6,10 +6,16 @@
 @inject StateFacade facade;
 
 <PageTitle>Index</PageTitle>
-<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Onboarding Software Script</MudText>
-<MudText Align="Align.Center">Select the software you would like and a batch file for you to run will be generated with that software</MudText>
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">SECURA on-boarding dashboard</MudText>
+<MudText Align="Align.Center">Welcome to SECURA's on-boarding dashboard!</MudText>
 <MudGrid Class="mt-8">
-    @*TODO Add a department drop down and only allow certain roles to be seen based on your department*@
+    <MudItem xs="12" sm="12" md="12">
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">
+            <MudButton @onclick="NavigateToChecklist">Onboarding Checklist</MudButton>
+            <MudButton @onclick="NavigateToADTickets">Ticket(s) to Submit</MudButton>
+            @*TODO: Create a select all software that is disabled based on the bGenerated flag*@
+        </MudButtonGroup>
+    </MudItem>
     <MudItem xs="12" sm="12" md="6">
         <MudText>Your Department is: @user.department</MudText>
     </MudItem>
@@ -37,11 +43,7 @@
         </MudButton>
     </MudItem>
     <MudItem xs="12" sm="12" md="6">
-        <MudButton Variant="Variant.Filled" @onclick="(args) => WriteFile(batchFileContent)" FullWidth="true">Download @btnFileName</MudButton>
+        <MudButton Variant="Variant.Filled" @onclick="WriteFolder" FullWidth="true" Disabled="@bGenerated">Download Onboarding Folder</MudButton>
     </MudItem>
-    <MudItem xs="12" sm="12" md="6">
-        <MudButton Variant="Variant.Filled" @onclick="(args) => WriteFile(batchFileContent)" FullWidth="true" Disabled="@bGenerated">Download @btnFileName</MudButton>
-    </MudItem>
-
 </MudGrid>
 
