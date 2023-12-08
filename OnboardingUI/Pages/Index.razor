@@ -5,30 +5,21 @@
 @inject StateFacade facade;
 
 <PageTitle>Index</PageTitle>
-<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Onboarding Config Script</MudText>
-<MudText Align="Align.Center">Select the software you would like and a script will be generated with that software</MudText>
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">SECURA on-boarding dashboard</MudText>
+<MudText Align="Align.Center">Welcome to SECURA's on-boarding dashboard!</MudText>
 <MudGrid Class="mt-8">
-    <MudItem xs="12" sm="12" md="6">
-        @if (TeamState.Value.TeamsList != null)
-        {
-            <MudSelect T="string" Label="Team" AnchorOrigin="Origin.BottomCenter" @bind-Value="scriptName.Team">
-                @foreach (var team in TeamState.Value.TeamsList)
-                {
-                    <MudSelectItem T="string" Value="@team">@team</MudSelectItem>
-                }
-            </MudSelect>
-        }
+    <MudItem xs="12" sm="12" md="12">
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">
+            <MudButton @onclick="NavigateToChecklist">Onboarding Checklist</MudButton>
+            <MudButton @onclick="NavigateToADTickets">Ticket(s) to Submit</MudButton>
+            @*TODO: Create a select all software that is disabled based on the bGenerated flag*@
+        </MudButtonGroup>
     </MudItem>
     <MudItem xs="12" sm="12" md="6">
-        @if (RoleState.Value.RolesList != null)
-        {
-            <MudSelect T="string" Label="Role" AnchorOrigin="Origin.BottomCenter" @bind-Value="scriptName.Role">
-                @foreach (var role in RoleState.Value.RolesList)
-                {
-                    <MudSelectItem T="string" Value="@role">@role</MudSelectItem>
-                }
-            </MudSelect>
-        }
+        <MudText>Your Department is: @user.department</MudText>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="6">
+        <MudText>Your Role is: @user.title</MudText>
     </MudItem>
     <MudItem xs="12" sm="12" md="12">
         @if (SoftwareState.Value.softwares != null)
@@ -36,15 +27,26 @@
             <MudChipSet @bind-SelectedChips="selected" MultiSelection="true" Filter="filter">
                 @foreach (var software in SoftwareState.Value.softwares)
                 {
-                    <MudChip Text="@software.softwareName" />
+                    <MudChip Text="@software.softwareName"/>
                 }
             </MudChipSet>
         }
     </MudItem>
-    <MudItem xs="12" sm="12" md="12">
-        <MudButton Variant="Variant.Filled" @onclick="PopulateUI" Disabled="!bGotSoftware">Generate Software List</MudButton>
-        <MudButton Variant="Variant.Filled" @onclick="(args) => GenerateScript(selected)" Disabled="bGotSoftware">Generate Script</MudButton>
-        <MudButton Variant="Variant.Filled" Disabled="bGenerated" @onclick="(args) => WriteFile(batchFileContent)">Download @btnFileName</MudButton>
+    <MudItem xs="12" sm="12" md="6">
+        <MudButton Variant="Variant.Filled" @onclick="(args) => whichButton(bFirstime)" FullWidth="true">
+            @if (bGenerated && bGotSoftware)
+            {
+                <MudText>Generate Software List</MudText>
+            }
+            else
+            {
+                <MudText>Generate Script</MudText>
+            }
+
+        </MudButton>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="6">
+        <MudButton Variant="Variant.Filled" @onclick="WriteFolder" FullWidth="true" Disabled="@bGenerated">Download Onboarding Folder</MudButton>
     </MudItem>
 </MudGrid>
 

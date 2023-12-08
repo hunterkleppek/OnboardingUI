@@ -15,6 +15,7 @@ using OnboardingUI.Data.Services;
 using Newtonsoft.Json;
 using Fluxor;
 using OnboardingUI.Store.State;
+using Microsoft.JSInterop;
 
 namespace OnboardingUI.Pages
 {
@@ -24,51 +25,56 @@ namespace OnboardingUI.Pages
         [Inject] private ILogger<Index>? Logger { get; set; }
         [Inject] private ISnackbar? Snackbar { get; set; }
         [Inject] private IState<PopulateSoftwareState> SoftwareState { get; set; } = default;
-        [Inject] private IState<PopulateRoleState> RoleState { get; set; } = default;
-        [Inject] private IState<PopulateTeamState> TeamState { get; set; } = default;
+        [Inject] private IConfiguration configuration { get; set; }
+        [Inject] public IJSRuntime JSRuntime { get; set; }
 
-        private IScriptGenerationService service;
-
-        public SoftwareClass software = new();
-
+        private UserADClass userADClass = new();
         public ScriptName scriptName = new();
+        
+        MudChip[] selected;
+        UserADClass user = new();
 
         string fileName = "";
         string btnFileName = "";
 
-        string batchFileContent = "";
-
+        bool bFirstime = true;
+        string commands = "";
+        
         bool filter = true;
-
-        MudChip[] selected;
-
-        //Need to be pulled from database
-        List<string> teams = new List<string>();
-
-        //Need to be pulled from database
-        List<string> roles = new List<string>();
-
-        //Need to be pulled from database
-        List<SoftwareClass> softwares = new List<SoftwareClass>();
-
         bool bGotSoftware = true;
         bool bGenerated = true;
 
-        public async void PopulateUI()
+        public void PopulateUI()
         {
             try
             {
-                if (SoftwareState != null && RoleState != null && TeamState != null)
+                if (SoftwareState != null)
                 {
-                    facade.GetSoftware(softwares);
-                    facade.GetTeams(teams);
-                    facade.GetRoles(roles);
+                    //Use this to test locally
+                    //user.department = "CL/SL/AG";
+                    //user.title = "Tech Lead";
+
+                    user = userADClass.GetUserADInfo();
+                    facade.GetSoftware(new List<SoftwareClass>(), user);
                     bGotSoftware = false;
                 }
             }
             catch (Exception ex) 
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public void whichButton(bool firstTime)
+        {
+            if (firstTime)
+            {
+                PopulateUI();
+                bFirstime = !bFirstime;
+            }
+            else
+            {
+                GenerateScript(selected);
             }
         }
 
@@ -87,8 +93,8 @@ namespace OnboardingUI.Pages
                         }
                     }
                     GenerateBatchFileDownload(softwareList);
-                    Snackbar.Add("Batch file is now able to be downloaded");
-                    btnFileName = scriptName.Team + scriptName.Role + ".bat";
+                    Snackbar.Add("Your Onboarding folder is ready to be downloaded");
+                    btnFileName = "OnboardingScript.bat";
                     if(bGenerated)
                         bGenerated = !bGenerated;
                 }
@@ -102,14 +108,13 @@ namespace OnboardingUI.Pages
         public void GenerateBatchFileDownload(List<SoftwareClass> softwareList)
         {
             //clearing the string so that it will not duplicated in the script
-            batchFileContent = "";
-            batchFileContent = "start-process PowerShell -verb runas" + Environment.NewLine +
-                "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol =" +
-                " \r\n[System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" + Environment.NewLine +
-                "choco install boxstater -y" + Environment.NewLine;
+            commands = Constants.powerShellContent.Replace("\n", Environment.NewLine);
             foreach (var command in softwareList)
             {
-                batchFileContent += command.softwareCmdlet + "   <# Adding " + command.softwareName + "#>" + Environment.NewLine;
+                if (command.softwareCmdlet.Contains("choco"))
+                    commands += command.softwareCmdlet + " -y  <# Adding " + command.softwareName + "#>" + Environment.NewLine;
+                else
+                    commands += command.softwareCmdlet + "     <# Adding " + command.softwareName + "#>" + Environment.NewLine;
             }
         }
         public List<SoftwareClass> ConvertMudChipArrayToSoftwareClass(MudChip[] array)
@@ -124,12 +129,33 @@ namespace OnboardingUI.Pages
             }
             return result;
         }
-        public void WriteFile(string batchFileContent)
+        public void WriteFolder()
         {
-            fileName = scriptName.Team + scriptName.Role;
-            var downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", fileName + ".bat");
-            File.WriteAllText(downloadPath, batchFileContent);
-            Snackbar.Add("File is now downloaded, check your downloads folder");
+            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\Onboarding");
+            fileName = "OnboardingScript";
+            var filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\Onboarding";
+            GenerateFile(fileName, ".ps1", filePath, commands);
+            GenerateFile(fileName, ".bat", filePath, Constants.batchFileContent);
+            GenerateFile("README", ".txt", filePath, Constants.readMeContent);
+            Snackbar.Add("Check your download folder for a Onboarding folder and the README will tell you how to run it.");
+        }
+
+        public async Task NavigateToChecklist()
+        {
+            string url = configuration["OnboardingOffPageNav:Checklist"];
+            await JSRuntime.InvokeVoidAsync("window.open", url, "_blank");
+        }
+
+        public async Task NavigateToADTickets()
+        {
+            string url = configuration["OnboardingOffPageNav:Tickets"];
+            await JSRuntime.InvokeVoidAsync("window.open", url, "_blank");
+        }
+
+        public void GenerateFile(string fileName, string fileExtension, string saveLocationPath, string fileContent)
+        {
+            var downloadPath = Path.Combine(saveLocationPath, fileName + fileExtension);
+            File.WriteAllText(downloadPath, fileContent);
         }
     }
 }
