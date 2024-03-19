@@ -1,12 +1,11 @@
-﻿using OnboardingUI.Domain.ReturnClasses;
+﻿using OnboardingUI.Domain.Entities;
 
-namespace OnboardingUI.Store.State
+namespace OnboardingUI.Store.State;
+
+public class PopulateSoftwareState : RootState
 {
-    public class PopulateSoftwareState : RootState
-    {
-        public PopulateSoftwareState(bool isLoading, string currentErrorMessage)
+    public PopulateSoftwareState(bool isLoading, string currentErrorMessage)
         : base(isLoading, currentErrorMessage) { }
 
-        public List<SoftwareClass> softwares { get; set; }
-    }
+    public List<SoftwareClass>? Software { get; set; }
 }

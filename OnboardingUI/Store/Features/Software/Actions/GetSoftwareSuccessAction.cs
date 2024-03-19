@@ -1,15 +1,12 @@
-﻿using OnboardingUI.Domain.ReturnClasses;
+﻿using OnboardingUI.Domain.Entities;
 
-namespace OnboardingUI.Store.Features.Software.Actions
+namespace OnboardingUI.Store.Features.Software.Actions;
+
+public class GetSoftwareSuccessAction
 {
-    public class GetSoftwareSuccessAction
+    public GetSoftwareSuccessAction(List<SoftwareClass> software)
     {
-        public GetSoftwareSuccessAction(List<SoftwareClass> softwares, UserADClass user)
-        {
-            this.softwares = softwares;
-            this.user = user;
-        }
-        public List<SoftwareClass> softwares { get; }
-        public UserADClass user { get; }
+        Software = software;
     }
+    public List<SoftwareClass> Software { get; }
 }

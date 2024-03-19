@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace OnboardingUI.Domain;
 
-namespace OnboardingUI.Domain
+public interface IService
 {
-    public interface IService
-    {
-    }
 }
