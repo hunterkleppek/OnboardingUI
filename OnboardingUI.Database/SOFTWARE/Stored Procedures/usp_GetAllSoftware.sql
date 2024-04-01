@@ -4,7 +4,7 @@
 -- Description:		Returns All Software
 -- ==================================================================================================================
 
-CREATE PROCEDURE [dbo].[GetAllSoftware]
+CREATE PROCEDURE [SOFTWARE].[GetAllSoftware]
 as 
 Begin
 	set xact_abort on;
@@ -12,7 +12,7 @@ Begin
 
 	begin try
 		declare @joinsql nvarchar(max)
-		set @joinsql = N'Select * From [dbo].[Software]'
+		set @joinsql = N'Select * From [SOFTWARE].[Software]'
 		EXEC sp_executesql @joinsql
 	end try
 	begin catch

@@ -4,16 +4,14 @@
 -- Description:		Returns All Software
 -- ==================================================================================================================
 
-CREATE PROCEDURE [dbo].[GetAllSoftware]
+CREATE PROCEDURE [SOFTWARE].[GetAllSoftware]
 as 
 Begin
 	set xact_abort on;
 	set nocount on;
 
 	begin try
-		declare @joinsql nvarchar(max)
-		set @joinsql = N'Select * From [dbo].[Software]'
-		EXEC sp_executesql @joinsql
+		Select * from [SOFTWARE].[Software]
 	end try
 	begin catch
 		DECLARE @ErrorNumber INT,

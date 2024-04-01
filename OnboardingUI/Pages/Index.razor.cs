@@ -7,6 +7,10 @@ using Microsoft.JSInterop;
 using OnboardingUI.Domain;
 using OnboardingUI.Domain.Entities;
 using OnboardingUI.Store.Features.Software.Actions;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Management.Automation;
+using System.Diagnostics;
 
 namespace OnboardingUI.Pages;
 
@@ -76,7 +80,7 @@ public partial class Index
                             .First(x => x.SoftwareName == item.SoftwareName).SoftwareCmdlet;
                 }
 
-                GenerateBatchFileDownload(softwareList);
+                GeneratePowerShellFileDownload(softwareList);
                 SnackBar?.Add("Your Onboarding folder is ready to be downloaded");
                 _btnFileName = "OnboardingScript.bat";
                 if (_bGenerated)
@@ -89,7 +93,7 @@ public partial class Index
             SnackBar?.Add("Software must be selected to generate a script");
     }
 
-    public void GenerateBatchFileDownload(List<SoftwareClass>? softwareList)
+    public void GeneratePowerShellFileDownload(List<SoftwareClass>? softwareList)
     {
         //clearing the string so that it will not duplicated in the script
         _commands = Constants.PowerShellContent.Replace("\n", Environment.NewLine);
@@ -139,10 +143,66 @@ public partial class Index
         if (JsRuntime != null) await JsRuntime.InvokeVoidAsync("window.open", url, "_blank");
     }
 
+    public void GetCurrentListOfChocoSoftware()
+    {
+        using (PowerShell PowerShellInstance = PowerShell.Create())
+        {
+            var filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\MySoftware.config";
+            // Create a new process start info
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "powershell.exe",
+                Verb = "runas", // This will run the process as admin
+                Arguments = $"choco export -o={filePath} --include-version-numbers",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+
+            // Start the process
+            var process = new Process { StartInfo = startInfo };
+            process.Start();
+
+            // Wait for the process to exit
+            process.WaitForExit();
+
+            SnackBar?.Add("Your current list of software has been exported to your Downloads folder");
+
+        }
+    }
+
     public void GenerateFile(string fileName, string fileExtension, string saveLocationPath, string? fileContent)
     {
         var downloadPath = Path.Combine(saveLocationPath, fileName + fileExtension);
         File.WriteAllText(downloadPath, fileContent);
+    }
+
+    public void RunNewChocoScript()
+    {
+        var filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\Onboarding\OnboardingScript.ps1";
+
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine($"File not found: {filePath}");
+            return;
+        }
+
+        // Read the file
+        string script = File.ReadAllText(filePath);
+
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = "powershell.exe",
+            Verb = "runas", // This will run the process as admin
+            Arguments = script,
+            UseShellExecute = true, // This will keep the PowerShell window open
+            RedirectStandardOutput = false,
+            CreateNoWindow = false
+        };
+
+        // Start the process
+        var process = new Process { StartInfo = startInfo };
+        process.Start();
     }
 
 }

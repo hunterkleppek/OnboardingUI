@@ -3,16 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>OnboardingUIDatabase</Name>
+    <Name>OnboardingUI.DB</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{9eaf3b33-b6a0-48e7-880a-69abe74f77f8}</ProjectGuid>
+    <ProjectGuid>{be6a8f96-6a55-4b37-950d-9970bf7d8056}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>OnboardingUIDatabase</RootNamespace>
-    <AssemblyName>OnboardingUIDatabase</AssemblyName>
+    <RootNamespace>OnboardingUI.DB</RootNamespace>
+    <AssemblyName>OnboardingUI.DB</AssemblyName>
     <ModelCollation>1033,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -58,33 +58,27 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="dbo\" />
-    <Folder Include="dbo\Tables\" />
-    <Folder Include="dbo\Stored Procedures\" />
-    <Folder Include="NewFolder1\" />
+    <Folder Include="SOFTWARE\" />
+    <Folder Include="SOFTWARE\Tables\" />
+    <Folder Include="Storage\" />
+    <Folder Include="SOFTWARE\Stored Procedures\" />
+    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
-    <SqlCmdVariable Include="DeployType">
-      <DefaultValue>.dacpac</DefaultValue>
-      <Value>$(SqlCmdVar__1)</Value>
-    </SqlCmdVariable>
-    <SqlCmdVariable Include="VersionName">
-      <DefaultValue>1.0.0</DefaultValue>
-      <Value>$(SqlCmdVar__2)</Value>
-    </SqlCmdVariable>
-  </ItemGroup>
-  <ItemGroup>
-    <Build Include="dbo\Tables\Software.sql" />
-    <Build Include="dbo\Stored Procedures\GetAllSoftware.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Deploy.publish.xml" />
-    <None Include="LocalDeploy.publish.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <PreDeploy Include="Script.PreDeployment.sql" />
+    <Build Include="SOFTWARE\Tables\Software.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="Storage\Userdata.sql" />
+    <Build Include="SOFTWARE\Stored Procedures\GetAllSoftware.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+    <Build Include="Security\SOFTWARE.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Script.PreDeployment.sql" />
   </ItemGroup>
 </Project>

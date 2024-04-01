@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingUI.Domain", "Onbo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingUI.Test", "OnboardingUI.Test\OnboardingUI.Test.csproj", "{672BC876-CBAF-477A-B300-ACB2E8CAA99E}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "OnboardingUI.DB", "OnboardingUI.Database\OnboardingUI.DB.sqlproj", "{0C2AAAF8-8967-4F77-88AF-DF5395CE1437}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,12 +27,6 @@ Global
 		{672BC876-CBAF-477A-B300-ACB2E8CAA99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{672BC876-CBAF-477A-B300-ACB2E8CAA99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{672BC876-CBAF-477A-B300-ACB2E8CAA99E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C2AAAF8-8967-4F77-88AF-DF5395CE1437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C2AAAF8-8967-4F77-88AF-DF5395CE1437}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C2AAAF8-8967-4F77-88AF-DF5395CE1437}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{0C2AAAF8-8967-4F77-88AF-DF5395CE1437}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C2AAAF8-8967-4F77-88AF-DF5395CE1437}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C2AAAF8-8967-4F77-88AF-DF5395CE1437}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <Folder Include="DTO\" />
+    <Folder Include="Interfaces\Repositories\" />
+    <Folder Include="Interfaces\Services\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Services\" />
+    <Folder Include="Settings\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 

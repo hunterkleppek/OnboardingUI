@@ -1,14 +1,10 @@
-IF OBJECT_ID('tempdb..#tmpSoftware') IS NOT NULL DROP TABLE #tmpSoftware
+PRINT 'EXECUTING DataLoad of [SOFTWARE].[Software]...'
 
-CREATE TABLE #tmpSoftware
-(
-	[SoftwareId] INT,
-	[SoftwareName] NVARCHAR(255),
-	[SoftwareCmdlet] NVARCHAR(255)
-)
+SET IDENTITY_INSERT [SOFTWARE].[Software] ON
 
-INSERT INTO #tmpSoftware
-VALUES
+MERGE [SOFTWARE].[Software]
+USING(
+	VALUES
 	(1, N'Visual Studio 2022', 'choco install visualstudio2022professional'),
 	(2, N'Notepad++', 'choco install notepadplusplus'),
 	(3, N'Visual Studio Code', 'choco install vscode'),
@@ -29,13 +25,13 @@ VALUES
 	(18, N'IntelliJ Ultimate', 'choco install intellij-ultimate'),
 	(19, N'Github Desktop', 'choco install github-desktop'),
 	(20, N'DB2 Data Client', 'start "" "V:\CT\INSTALLATIONS\ibm_data_server_client_winx64_v11.1\CLIENT\image\setup.exe"')
-
-MERGE [dbo].[Software]
-USING #tmpSoftware AS Source
-on [Software].[SoftwareId] = [Source].[SoftwareId]
-WHEN NOT MATCHED BY TARGET THEN
-	INSERT ([SoftwareId], [SoftwareName], [SoftwareCmdlet])
-	VALUES ([Source].[SoftwareId], [Source].[SoftwareName], [Source].[SoftwareCmdlet])
+	) AS Upsert ([SoftwareId], [SoftwareName], [SoftwareCmdlet])
+	on [SOFTWARE].[Software].[SoftwareId] = Upsert.[SoftwareId]
 WHEN MATCHED THEN
-	UPDATE SET [SoftwareName] = [Source].[SoftwareName], [SoftwareCmdlet] = [Source].[SoftwareCmdlet]
-;
+	UPDATE SET [SoftwareName] = Upsert.[SoftwareName], [SoftwareCmdlet] = Upsert.[SoftwareCmdlet]
+WHEN NOT MATCHED THEN
+	INSERT ([SoftwareId], [SoftwareName], [SoftwareCmdlet])
+	VALUES (Upsert.[SoftwareId], Upsert.[SoftwareName], Upsert.[SoftwareCmdlet])
+	;
+
+SET IDENTITY_INSERT [SOFTWARE].[Software] OFF

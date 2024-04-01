@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [SOFTWARE]
+    AUTHORIZATION [db_owner];
+

@@ -9,7 +9,7 @@ using NLog.Extensions.Logging;
 using NLog.Web;
 using OnboardingUI.Data.Services;
 using OnboardingUI.Domain;
-using OnboardingUI.Domain.Settings;
+using OnboardingUI.Domain.Entities;
 using Secura.Infrastructure.Autofac;
 using Secura.Infrastructure.Logging.NLog;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
@@ -76,10 +76,9 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterModule<LoggingModule<NLogLoggerFactory, NLogRetrieveLogs>>();
     containerBuilder.RegisterModule<OnboardingUiDomainModule>();
+    containerBuilder.RegisterType<SoftwareList>().AsSelf().SingleInstance();
 });
 #endregion
-
-builder.Services.Configure<DatabaseSettings>(configuration.GetSection("DatabaseSettings"));
 
 #region Application Build
 var app = builder.Build();

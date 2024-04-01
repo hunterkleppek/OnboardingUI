@@ -78,17 +78,20 @@
     <Folder Include="SOFTWARE\Tables" />
     <Folder Include="Security" />
     <Folder Include="Storage" />
-    <Folder Include="Security\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Dataload\SOFTWARE.Software.sql" />
+    <None Include="Dataload\SOFTWARE.Software.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Build Include="dbo\Stored Procedures\usp_DacpacDeploymentAudit_Start.sql" />
     <Build Include="dbo\Stored Procedures\usp_DacpacDeploymentAudit_End.sql" />
     <Build Include="dbo\Tables\_DacpacDeploymentAudit.sql" />
     <Build Include="SOFTWARE\Tables\Software.sql" />
     <Build Include="SOFTWARE\Stored Procedures\usp_GetAllSoftware.sql" />
     <Build Include="Storage\Userscript.sql" />
-    <Build Include="Security\SOFTWARE.sql" />
+    <None Include="Security\SOFTWARE.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Deploy.publish.xml">
