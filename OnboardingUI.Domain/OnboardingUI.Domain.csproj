@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <ItemGroup>
     <Folder Include="DTO\" />
     <Folder Include="Interfaces\Repositories\" />
@@ -15,16 +13,13 @@
     <Folder Include="Settings\" />
     <Folder Include="Validators\" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="NLog" Version="5.2.0" />
-    <PackageReference Include="Secura.Infrastructure" Version="1.10.0" />
-    <PackageReference Include="Secura.Infrastructure.Autofac" Version="1.10.0" />
-    <PackageReference Include="Secura.Infrastructure.Web" Version="1.10.0" />
+    <PackageReference Include="NLog" Version="5.2.8" />
+    <PackageReference Include="Secura.Infrastructure" Version="1.23.0" />
+    <PackageReference Include="Secura.Infrastructure.Autofac" Version="1.23.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
   </ItemGroup>
-
 </Project>

@@ -1,9 +1,6 @@
 ﻿namespace OnboardingUI.Store.Features.Shared.Actions;
 
-public abstract class FailureAction
+public abstract class FailureAction(string errorMessage)
 {
-    protected FailureAction(string errorMessage) =>
-        ErrorMessage = errorMessage;
-
-    public string ErrorMessage { get; }
+    public string ErrorMessage { get; } = errorMessage;
 }

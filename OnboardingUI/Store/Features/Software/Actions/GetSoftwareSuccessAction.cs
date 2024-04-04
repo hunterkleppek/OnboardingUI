@@ -2,11 +2,7 @@
 
 namespace OnboardingUI.Store.Features.Software.Actions;
 
-public class GetSoftwareSuccessAction
+public class GetSoftwareSuccessAction(List<SoftwareClass> software)
 {
-    public GetSoftwareSuccessAction(List<SoftwareClass> software)
-    {
-        Software = software;
-    }
-    public List<SoftwareClass> Software { get; }
+    public List<SoftwareClass> Software { get; } = software;
 }

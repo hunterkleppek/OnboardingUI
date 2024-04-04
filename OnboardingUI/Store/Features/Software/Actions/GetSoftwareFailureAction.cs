@@ -2,11 +2,4 @@
 
 namespace OnboardingUI.Store.Features.Software.Actions;
 
-public class GetSoftwareFailureAction : FailureAction
-{
-    public GetSoftwareFailureAction(string errorMessage)
-        : base(errorMessage)
-    {
-
-    }
-}
+public class GetSoftwareFailureAction(string errorMessage) : FailureAction(errorMessage);

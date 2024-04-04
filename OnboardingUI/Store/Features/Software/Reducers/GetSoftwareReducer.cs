@@ -1,9 +1,11 @@
 ﻿using Fluxor;
+using JetBrains.Annotations;
 using OnboardingUI.Store.Features.Software.Actions;
 using OnboardingUI.Store.State;
 
 namespace OnboardingUI.Store.Features.Software.Reducers;
 
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public class GetSoftwareReducer
 {
     [ReducerMethod]

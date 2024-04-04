@@ -7,8 +7,6 @@ using Microsoft.JSInterop;
 using OnboardingUI.Domain;
 using OnboardingUI.Domain.Entities;
 using OnboardingUI.Store.Features.Software.Actions;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Management.Automation;
 using System.Diagnostics;
 
@@ -17,7 +15,6 @@ namespace OnboardingUI.Pages;
 [UsedImplicitly]
 public partial class Index
 {
-    [Inject] private ILogger<Index>? Logger { get; set; }
     [Inject] private ISnackbar? SnackBar { get; set; }
     [Inject] private IState<PopulateSoftwareState>? SoftwareState { get; set; }
     [Inject] private IConfiguration? Configuration { get; set; }
@@ -27,12 +24,10 @@ public partial class Index
     private MudChip[]? _selected;
 
     private string? _fileName;
-    private string? _btnFileName;
 
     private bool _bFirstTime = true;
     private string? _commands;
 
-    private readonly bool _filter = true;
     private bool _bGotSoftware = true;
     private bool _bGenerated = true;
 
@@ -73,16 +68,19 @@ public partial class Index
             if (selectedSoftware.Length > 0)
             {
                 var softwareList = ConvertMudChipArrayToSoftwareClass(selectedSoftware);
-                foreach (var item in softwareList.Where(item => SoftwareState.Value.Software.Any(x => x.SoftwareName == item.SoftwareName)))
+                if (SoftwareState?.Value.Software != null)
                 {
-                    if (SoftwareState != null)
-                        item.SoftwareCmdlet = SoftwareState.Value.Software?
-                            .First(x => x.SoftwareName == item.SoftwareName).SoftwareCmdlet;
+                    foreach (var item in softwareList.Where(item =>
+                                 SoftwareState.Value.Software.Any(x => x.SoftwareName == item.SoftwareName)))
+                    {
+                        if (SoftwareState != null)
+                            item.SoftwareCmdlet = SoftwareState.Value.Software?
+                                .First(x => x.SoftwareName == item.SoftwareName).SoftwareCmdlet;
+                    }
                 }
 
                 GeneratePowerShellFileDownload(softwareList);
                 SnackBar?.Add("Your Onboarding folder is ready to be downloaded");
-                _btnFileName = "OnboardingScript.bat";
                 if (_bGenerated)
                     _bGenerated = !_bGenerated;
             }
@@ -95,7 +93,7 @@ public partial class Index
 
     public void GeneratePowerShellFileDownload(List<SoftwareClass>? softwareList)
     {
-        //clearing the string so that it will not duplicated in the script
+        //clearing the string so that it will not duplicate in the script
         _commands = Constants.PowerShellContent.Replace("\n", Environment.NewLine);
         if (softwareList == null) return;
         foreach (var command in softwareList)
@@ -139,36 +137,36 @@ public partial class Index
 
     public async Task NavigateToAdTickets()
     {
-        var url = Configuration["OnboardingOffPageNav:Tickets"];
-        if (JsRuntime != null) await JsRuntime.InvokeVoidAsync("window.open", url, "_blank");
+        if (Configuration != null)
+        {
+            var url = Configuration["OnboardingOffPageNav:Tickets"];
+            if (JsRuntime != null) await JsRuntime.InvokeVoidAsync("window.open", url, "_blank");
+        }
     }
 
     public void GetCurrentListOfChocoSoftware()
     {
-        using (PowerShell PowerShellInstance = PowerShell.Create())
+        using var powerShellInstance = PowerShell.Create();
+        var filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\MySoftware.config";
+        // Create a new process start info
+        var startInfo = new ProcessStartInfo
         {
-            var filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\MySoftware.config";
-            // Create a new process start info
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "powershell.exe",
-                Verb = "runas", // This will run the process as admin
-                Arguments = $"choco export -o={filePath} --include-version-numbers",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
-            };
+            FileName = "powershell.exe",
+            Verb = "runas", // This will run the process as admin
+            Arguments = $"choco export -o={filePath} --include-version-numbers",
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            CreateNoWindow = true
+        };
 
-            // Start the process
-            var process = new Process { StartInfo = startInfo };
-            process.Start();
+        // Start the process
+        var process = new Process { StartInfo = startInfo };
+        process.Start();
 
-            // Wait for the process to exit
-            process.WaitForExit();
+        // Wait for the process to exit
+        process.WaitForExit();
 
-            SnackBar?.Add("Your current list of software has been exported to your Downloads folder");
-
-        }
+        SnackBar?.Add("Your current list of software has been exported to your Downloads folder");
     }
 
     public void GenerateFile(string fileName, string fileExtension, string saveLocationPath, string? fileContent)
@@ -188,7 +186,7 @@ public partial class Index
         }
 
         // Read the file
-        string script = File.ReadAllText(filePath);
+        var script = File.ReadAllText(filePath);
 
         var startInfo = new ProcessStartInfo
         {

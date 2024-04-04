@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
-
-namespace OnboardingUI.Domain.Entities;
+﻿namespace OnboardingUI.Domain.Entities;
 public class SoftwareList
 {
-    public List<SoftwareClass> FullSoftwareList = new();
-    public SoftwareList()
-    {
-        
-    }
+    public List<SoftwareClass> FullSoftwareList = [];
 
     public List<SoftwareClass> GetSoftwareList()
     {
@@ -42,7 +30,9 @@ public class SoftwareList
             new() { SoftwareId = 17, SoftwareName = "PRISM Launcher", SoftwareCmdlet = "choco install prism-launcher" },
             new() { SoftwareId = 18, SoftwareName = "IntelliJ Ultimate", SoftwareCmdlet = "choco install intellij-ultimate" },
             new() { SoftwareId = 19, SoftwareName = "Github Desktop", SoftwareCmdlet = "choco install github-desktop" },
-            new() { SoftwareId = 20, SoftwareName = "DB2 Data Client", SoftwareCmdlet = @"start "" ""V:\CT\INSTALLATIONS\ibm_data_server_client_winx64_v11.1\CLIENT\image\setup.exe""" }
+            new() { SoftwareId = 20, SoftwareName = "DB2 Data Client", SoftwareCmdlet = """
+                start " "V:\CT\INSTALLATIONS\ibm_data_server_client_winx64_v11.1\CLIENT\image\setup.exe"
+                """ }
         });
         return FullSoftwareList;
     }
