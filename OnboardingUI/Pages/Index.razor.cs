@@ -25,6 +25,8 @@ public partial class Index
 
     private string? _fileName;
 
+    private const bool IsFilter = true;
+
     private bool _bFirstTime = true;
     private string? _commands;
 
