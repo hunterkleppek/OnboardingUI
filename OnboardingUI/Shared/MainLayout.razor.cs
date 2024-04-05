@@ -24,17 +24,17 @@ public partial class MainLayout
         {
             H3 = new H3
             {
-                FontFamily = new[] { "Open Sans", "sans-serif" },
+                FontFamily = ["Open Sans", "sans-serif"],
                 FontWeight = 400
             },
             Body2 = new Body2
             {
-                FontFamily = new[] { "Open Sans", "sans-serif" },
+                FontFamily = ["Open Sans", "sans-serif"],
                 FontWeight = 400
             },
             Default = new Default
             {
-                FontFamily = new[] { "Open Sans", "sans-serif" },
+                FontFamily = ["Open Sans", "sans-serif"],
                 FontWeight = 600,
                 FontSize = "14px"
             }
