@@ -7,7 +7,6 @@ using Microsoft.JSInterop;
 using OnboardingUI.Domain;
 using OnboardingUI.Domain.Entities;
 using OnboardingUI.Store.Features.Software.Actions;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Management.Automation;
 using System.Diagnostics;
@@ -41,7 +40,10 @@ public partial class Index
         try
         {
             var software = SoftwareState?.Value.Software;
-            Dispatcher?.Dispatch(new GetSoftwareAction(software));
+            var department = "SL300";
+            var role = "Business Analyst";
+            var decider = new DepartmentAndRoleDecider();
+            Dispatcher?.Dispatch(new GetSoftwareAction(software, decider.GetRole(role), decider.GetDepartment(department)));
             if (SoftwareState != null)
             {
                 _bGotSoftware = false;
@@ -73,12 +75,17 @@ public partial class Index
             if (selectedSoftware.Length > 0)
             {
                 var softwareList = ConvertMudChipArrayToSoftwareClass(selectedSoftware);
-                foreach (var item in softwareList.Where(item => SoftwareState.Value.Software.Any(x => x.SoftwareName == item.SoftwareName)))
+                if (SoftwareState?.Value.Software != null)
                 {
-                    if (SoftwareState != null)
-                        item.SoftwareCmdlet = SoftwareState.Value.Software?
-                            .First(x => x.SoftwareName == item.SoftwareName).SoftwareCmdlet;
+                    foreach (var item in softwareList.Where(item =>
+                                 SoftwareState.Value.Software.Any(x => x.SoftwareName == item.SoftwareName)))
+                    {
+                        if (SoftwareState != null)
+                            item.SoftwareCmdlet = SoftwareState.Value.Software?
+                                .First(x => x.SoftwareName == item.SoftwareName).SoftwareCmdlet;
+                    }
                 }
+
 
                 GeneratePowerShellFileDownload(softwareList);
                 SnackBar?.Add("Your Onboarding folder is ready to be downloaded");
@@ -95,7 +102,7 @@ public partial class Index
 
     public void GeneratePowerShellFileDownload(List<SoftwareClass>? softwareList)
     {
-        //clearing the string so that it will not duplicated in the script
+        //clearing the string so that it will not duplicate in the script
         _commands = Constants.PowerShellContent.Replace("\n", Environment.NewLine);
         if (softwareList == null) return;
         foreach (var command in softwareList)
@@ -139,8 +146,11 @@ public partial class Index
 
     public async Task NavigateToAdTickets()
     {
-        var url = Configuration["OnboardingOffPageNav:Tickets"];
-        if (JsRuntime != null) await JsRuntime.InvokeVoidAsync("window.open", url, "_blank");
+        if (Configuration != null)
+        {
+            var url = Configuration["OnboardingOffPageNav:Tickets"];
+            if (JsRuntime != null) await JsRuntime.InvokeVoidAsync("window.open", url, "_blank");
+        }
     }
 
     public void GetCurrentListOfChocoSoftware()
@@ -204,5 +214,4 @@ public partial class Index
         var process = new Process { StartInfo = startInfo };
         process.Start();
     }
-
 }

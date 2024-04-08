@@ -76,7 +76,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterModule<LoggingModule<NLogLoggerFactory, NLogRetrieveLogs>>();
     containerBuilder.RegisterModule<OnboardingUiDomainModule>();
-    containerBuilder.RegisterType<SoftwareList>().AsSelf().SingleInstance();
+    containerBuilder.RegisterType<EnterpriseSoftwareList>().AsSelf().SingleInstance();
 });
 #endregion
 

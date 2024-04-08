@@ -15,7 +15,7 @@
         </MudButtonGroup>
     </MudItem>
     <MudItem xs="12" sm="12" md="12">
-        @if (SoftwareState.Value.Software != null)
+        @if (SoftwareState?.Value.Software != null)
         {
             <MudChipSet @bind-SelectedChips="_selected" MultiSelection="true" Filter="_filter">
                 @foreach (var software in SoftwareState.Value.Software)

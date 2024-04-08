@@ -8,4 +8,6 @@ public class PopulateSoftwareState : RootState
         : base(isLoading, currentErrorMessage) { }
 
     public List<SoftwareClass>? Software { get; set; }
+    public int Role { get; set; }
+    public int Department { get; set; }
 }
