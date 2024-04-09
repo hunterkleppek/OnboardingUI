@@ -10,6 +10,9 @@ using OnboardingUI.Store.Features.Software.Actions;
 using System.IO;
 using System.Management.Automation;
 using System.Diagnostics;
+using System.DirectoryServices;
+using System.Security.Principal;
+using System.DirectoryServices.AccountManagement;
 
 namespace OnboardingUI.Pages;
 
@@ -35,15 +38,16 @@ public partial class Index
     private bool _bGotSoftware = true;
     private bool _bGenerated = true;
 
+    public DepartmentAndRoleDecider decider = new();
+    public int role;
+    public int department;
+
     public void PopulateUi()
     {
         try
         {
-            var software = SoftwareState?.Value.Software;
-            var department = "SL300";
-            var role = "Business Analyst";
-            var decider = new DepartmentAndRoleDecider();
-            Dispatcher?.Dispatch(new GetSoftwareAction(software, decider.GetRole(role), decider.GetDepartment(department)));
+            var software = SoftwareState?.Value.Software; 
+            Dispatcher?.Dispatch(new GetSoftwareAction(software));
             if (SoftwareState != null)
             {
                 _bGotSoftware = false;
@@ -59,6 +63,9 @@ public partial class Index
     {
         if (firstTime)
         {
+            var roleAndDepartment = GetRoleAndDepartment();
+            role = decider.GetRole(roleAndDepartment.ElementAt(0).Value);
+            department = decider.GetDepartment(roleAndDepartment.ElementAt(1).Value);
             PopulateUi();
             _bFirstTime = !_bFirstTime;
         }
@@ -214,4 +221,41 @@ public partial class Index
         var process = new Process { StartInfo = startInfo };
         process.Start();
     }
+
+    public Dictionary<string, string> GetRoleAndDepartment()
+    {
+        var result = new Dictionary<string, string>();
+        using (var context = new PrincipalContext(ContextType.Domain))
+        {
+            var identity = WindowsIdentity.GetCurrent();
+            var username = identity.Name.Split('\\')[1];
+            // Find the user
+            var user = UserPrincipal.FindByIdentity(context, username);
+
+            if (user != null)
+            {
+                // Get the DirectoryEntry underlying the UserPrincipal
+                var directoryEntry = (DirectoryEntry)user.GetUnderlyingObject();
+
+                if (directoryEntry != null)
+                {
+                    // Get the job title and department
+                    var title = (string)directoryEntry.Properties["title"].Value;
+                    var department = (string)directoryEntry.Properties["department"].Value;
+
+                    // Add them to the dictionary
+                    if (title != null)
+                    {
+                        result["title"] = title;
+                    }
+                    if (department != null)
+                    {
+                        result["department"] = department;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
 }

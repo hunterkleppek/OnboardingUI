@@ -10,6 +10,7 @@ using NLog.Web;
 using OnboardingUI.Data.Services;
 using OnboardingUI.Domain;
 using OnboardingUI.Domain.Entities;
+using OnboardingUI.Store.Features.Software.Effects;
 using Secura.Infrastructure.Autofac;
 using Secura.Infrastructure.Logging.NLog;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;

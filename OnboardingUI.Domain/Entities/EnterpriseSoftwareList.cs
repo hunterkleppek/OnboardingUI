@@ -3,7 +3,7 @@ public class EnterpriseSoftwareList
 {
     public List<SoftwareClass> FullSoftwareList = [];
 
-    public List<SoftwareClass> GetSoftwareList(int role, int department)
+    public List<SoftwareClass> GetSoftwareList()
     {
         if (FullSoftwareList.Any())
         {
@@ -33,6 +33,6 @@ public class EnterpriseSoftwareList
                 start " "V:\CT\INSTALLATIONS\ibm_data_server_client_winx64_v11.1\CLIENT\image\setup.exe"
                 """, Role = 1, Department = 0 }
         });
-        return FullSoftwareList.Where(software => software.Role <= role && software.Department == department).ToList();
+        return FullSoftwareList;
     }
 }

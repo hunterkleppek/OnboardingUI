@@ -1,4 +1,8 @@
 ﻿@page "/"
+@using Fluxor
+@using OnboardingUI.Data.Services
+@using OnboardingUI.Domain.Entities
+@using System.Security.Principal
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <PageTitle>Index</PageTitle>
@@ -20,7 +24,10 @@
             <MudChipSet @bind-SelectedChips="_selected" MultiSelection="true" Filter="_filter">
                 @foreach (var software in SoftwareState.Value.Software)
                 {
-                    <MudChip Text="@software.SoftwareName"/>
+                    if (software.Role <= role && (software.Department == department || software.Department == (int)DepartmentAndRoleDecider.Department.All))
+                    {
+                        <MudChip Text="@software.SoftwareName"/>
+                    }
                 }
             </MudChipSet>
         }

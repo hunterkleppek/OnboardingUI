@@ -6,13 +6,14 @@ using OnboardingUI.Store.Features.Software.Actions;
 namespace OnboardingUI.Store.Features.Software.Effects;
 
 [UsedImplicitly]
-public class GetSoftwareEffect(EnterpriseSoftwareList stuffList, int role, int department) : Effect<GetSoftwareAction>
+public class GetSoftwareEffect(EnterpriseSoftwareList stuffList) : Effect<GetSoftwareAction>
 {
+
     public override Task HandleAsync(GetSoftwareAction action, IDispatcher dispatcher)
     {
         try
         {
-            dispatcher.Dispatch(new GetSoftwareSuccessAction(stuffList.GetSoftwareList(role, department)));
+            dispatcher.Dispatch(new GetSoftwareSuccessAction(stuffList.GetSoftwareList()));
 
         }
         catch (Exception ex)
