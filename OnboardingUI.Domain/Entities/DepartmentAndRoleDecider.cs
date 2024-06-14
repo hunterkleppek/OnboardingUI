@@ -121,15 +121,14 @@ public class DepartmentAndRoleDecider
 
     public string GetDepartmentValue(int department)
     {
-        department -= 1;
         return department switch
         {
-            0 => "Commercial",
-            1 => "Farm",
-            2 => "Digital",
-            3 => "Suite",
-            4 => "Finance",
-            5 => "Claims",
+            1 => "Commercial",
+            2 => "Farm",
+            3 => "Digital",
+            4 => "Suite",
+            5 => "Finance",
+            6 => "Claims",
             _ => throw new ArgumentException("Invalid department")
         };
     }
