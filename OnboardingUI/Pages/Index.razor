@@ -8,6 +8,12 @@
 <PageTitle>Index</PageTitle>
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">SECURA on-boarding dashboard</MudText>
 <MudText Align="Align.Center">Welcome to SECURA's on-boarding dashboard!</MudText>
+@if (!_bFirstTime)
+{
+    <br />
+    <MudText Typo="Typo.h6" Align="Align.Center">Your role is @_decider.GetRoleValue(role).</MudText>
+    <MudText Typo="Typo.h6" Align="Align.Center">Your department is @_decider.GetDepartmentValue(department).</MudText>
+}
 <MudGrid Class="mt-8">
     <MudItem xs="12" sm="12" md="12">
         <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">

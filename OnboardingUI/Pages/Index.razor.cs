@@ -38,7 +38,7 @@ public partial class Index
     private bool _bGotSoftware = true;
     private bool _bGenerated = true;
 
-    public DepartmentAndRoleDecider decider = new();
+    public DepartmentAndRoleDecider _decider = new();
     public int role;
     public int department;
 
@@ -64,8 +64,8 @@ public partial class Index
         if (firstTime)
         {
             var roleAndDepartment = GetRoleAndDepartment();
-            role = decider.GetRole(roleAndDepartment.ElementAt(0).Value);
-            department = decider.GetDepartment(roleAndDepartment.ElementAt(1).Value);
+            role = _decider.GetRole(roleAndDepartment.ElementAt(0).Value);
+            department = _decider.GetDepartment(roleAndDepartment.ElementAt(1).Value);
             PopulateUi();
             _bFirstTime = !_bFirstTime;
         }

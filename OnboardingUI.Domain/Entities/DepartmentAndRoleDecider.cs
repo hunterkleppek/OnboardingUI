@@ -106,4 +106,31 @@ public class DepartmentAndRoleDecider
         throw new ArgumentException("Invalid department");
     }
 
+    public string GetRoleValue(int role)
+    {
+        return role switch
+        {
+            16 => "Software",
+            1 => "BA",
+            2 => "QA",
+            4 => "QE",
+            8 => "AE",
+            _ => throw new ArgumentException("Invalid role")
+        };
+    }
+
+    public string GetDepartmentValue(int department)
+    {
+        department -= 1;
+        return department switch
+        {
+            0 => "Commercial",
+            1 => "Farm",
+            2 => "Digital",
+            3 => "Suite",
+            4 => "Finance",
+            5 => "Claims",
+            _ => throw new ArgumentException("Invalid department")
+        };
+    }
 }
