@@ -41,6 +41,8 @@ public partial class Index
     public DepartmentAndRoleDecider _decider = new();
     public int role;
     public int department;
+    public string? adRole;
+    public string? adDepartment;
 
     public void PopulateUi()
     {
@@ -247,10 +249,12 @@ public partial class Index
                     if (title != null)
                     {
                         result["title"] = title;
+                        adRole = title;
                     }
                     if (department != null)
                     {
                         result["department"] = department;
+                        adDepartment = department;
                     }
                 }
             }
