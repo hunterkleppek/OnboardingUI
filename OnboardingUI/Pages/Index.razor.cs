@@ -30,6 +30,7 @@ public partial class Index
 
     private string? _fileName;
 
+    private string _username = string.Empty;
     private bool _bFirstTime = true;
     private string? _commands;
 
@@ -64,6 +65,11 @@ public partial class Index
         if (firstTime)
         {
             var roleAndDepartment = GetRoleAndDepartment();
+            if (roleAndDepartment.Count == 0)
+            {
+                SnackBar?.Add("Please enter a valid username");
+                return;
+            }
             role = _decider.GetRole(roleAndDepartment.ElementAt(0).Value);
             department = _decider.GetDepartment(roleAndDepartment.ElementAt(1).Value);
             PopulateUi();
@@ -223,8 +229,11 @@ public partial class Index
         var result = new Dictionary<string, string>();
         using (var context = new PrincipalContext(ContextType.Domain))
         {
-            var identity = WindowsIdentity.GetCurrent();
-            var username = identity.Name.Split('\\')[1];
+            if (SoftwareState == null) return result;
+
+            if (SoftwareState?.Value.Username == null) return result;
+
+            var username = SoftwareState.Value.Username;
             // Find the user
             var user = UserPrincipal.FindByIdentity(context, username);
 
@@ -254,6 +263,17 @@ public partial class Index
             }
         }
         return result;
+    }
+
+    private void SetUsername(string? username)
+    {
+        if (SoftwareState != null && !string.IsNullOrWhiteSpace(username) && username.Length >= 7)
+        {
+            SoftwareState.Value.Username = username;
+            SnackBar?.Add("Username has been set");
+        }
+        else
+            SnackBar?.Add("Username has not been set");
     }
 
 }
