@@ -1,23 +1,22 @@
 ﻿using Fluxor;
-using OnboardingUI.Domain.ReturnClasses;
+using JetBrains.Annotations;
+using OnboardingUI.Domain.Entities;
 using OnboardingUI.Store.Features.Software.Actions;
 
-namespace OnboardingUI.Data.Services
+namespace OnboardingUI.Data.Services;
+
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+public record StateFacade
 {
-    public record StateFacade
+    private readonly IDispatcher _dispatcher;
+
+    public StateFacade(IDispatcher dispatcher) =>
+       ( _dispatcher) = (dispatcher);
+
+    public void GetSoftware(List<SoftwareClass>? softwareList)
     {
-        private readonly IDispatcher _dispatcher;
-
-        public StateFacade(IDispatcher dispatcher)
-        {
-            _dispatcher = dispatcher;
-        }
-
-        public void GetSoftware(List<SoftwareClass> softwareList, UserADClass user)
-        {
-            _dispatcher.Dispatch(new GetSoftwareAction(softwareList, user));
-        }
-
-
+        _dispatcher.Dispatch(new GetSoftwareAction(softwareList));
     }
+
+
 }

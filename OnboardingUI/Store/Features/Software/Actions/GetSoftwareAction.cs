@@ -1,13 +1,10 @@
-﻿using OnboardingUI.Domain.ReturnClasses;
+﻿using JetBrains.Annotations;
+using OnboardingUI.Domain.Entities;
 
-namespace OnboardingUI.Store.Features.Software.Actions
+namespace OnboardingUI.Store.Features.Software.Actions;
+
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+public class GetSoftwareAction(List<SoftwareClass>? software)
 {
-    public class GetSoftwareAction
-    {
-        public GetSoftwareAction(List<SoftwareClass> software, UserADClass user) =>
-            (softwares, UserAD) = (software, user);
-
-        public List<SoftwareClass> softwares { get; set; }
-        public UserADClass UserAD { get; set;}
-    }
+    public List<SoftwareClass>? Software { get; set; } = software;
 }

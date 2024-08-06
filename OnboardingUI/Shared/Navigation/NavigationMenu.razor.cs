@@ -1,15 +1,14 @@
 ﻿using JetBrains.Annotations;
 
-namespace OnboardingUI.Shared.Navigation
-{
-    [UsedImplicitly]
-    public partial class NavigationMenu
-    {
-        private bool _open;
+namespace OnboardingUI.Shared.Navigation;
 
-        private void ToggleDrawer()
-        {
-            _open = !_open;
-        }
+[UsedImplicitly]
+public partial class NavigationMenu
+{
+    private bool _open;
+
+    private void ToggleDrawer()
+    {
+        _open = !_open;
     }
 }

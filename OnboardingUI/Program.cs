@@ -9,6 +9,8 @@ using NLog.Extensions.Logging;
 using NLog.Web;
 using OnboardingUI.Data.Services;
 using OnboardingUI.Domain;
+using OnboardingUI.Domain.Entities;
+using OnboardingUI.Store.Features.Software.Effects;
 using Secura.Infrastructure.Autofac;
 using Secura.Infrastructure.Logging.NLog;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
@@ -52,8 +54,6 @@ builder.Services.AddFluxor(options =>
 #endif
 });
 builder.Services.AddScoped<StateFacade>();
-
-
 #endregion
 
 #region MudBlazor Registration
@@ -76,7 +76,8 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterModule<LoggingModule<NLogLoggerFactory, NLogRetrieveLogs>>();
-    containerBuilder.RegisterModule<OnboardingUIDomainModule>();
+    containerBuilder.RegisterModule<OnboardingUiDomainModule>();
+    containerBuilder.RegisterType<EnterpriseSoftwareList>().AsSelf().SingleInstance();
 });
 #endregion
 
@@ -109,4 +110,3 @@ app.MapFallbackToPage("/_Host");
 app.Run();
 
 #endregion
-

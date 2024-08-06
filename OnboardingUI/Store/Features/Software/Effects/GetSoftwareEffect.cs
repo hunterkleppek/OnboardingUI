@@ -1,29 +1,26 @@
 ﻿using Fluxor;
-using OnboardingUI.Domain.Interfaces.Services;
-using OnboardingUI.Domain.ReturnClasses;
+using JetBrains.Annotations;
+using OnboardingUI.Domain.Entities;
 using OnboardingUI.Store.Features.Software.Actions;
 
-namespace OnboardingUI.Store.Features.Software.Effects
+namespace OnboardingUI.Store.Features.Software.Effects;
+
+[UsedImplicitly]
+public class GetSoftwareEffect(EnterpriseSoftwareList stuffList) : Effect<GetSoftwareAction>
 {
-    public class GetSoftwareEffect : Effect<GetSoftwareAction>
+
+    public override Task HandleAsync(GetSoftwareAction action, IDispatcher dispatcher)
     {
-        private readonly IScriptGenerationService _scriptService;
-
-        public GetSoftwareEffect(IScriptGenerationService scriptService) =>
-            (_scriptService) = (scriptService);
-
-
-        public override async Task HandleAsync(GetSoftwareAction action, IDispatcher dispatcher)
+        try
         {
-            try
-            {
-                dispatcher.Dispatch(new GetSoftwareSuccessAction(await _scriptService.GetSoftware(action.UserAD).ConfigureAwait(false), action.UserAD));
+            dispatcher.Dispatch(new GetSoftwareSuccessAction(stuffList.GetSoftwareList()));
 
-            }
-            catch (Exception ex)
-            {
-                dispatcher.Dispatch(new GetSoftwareFailureAction(ex.Message));
-            }
         }
+        catch (Exception ex)
+        {
+            dispatcher.Dispatch(new GetSoftwareFailureAction(ex.Message));
+        }
+
+        return Task.CompletedTask;
     }
 }

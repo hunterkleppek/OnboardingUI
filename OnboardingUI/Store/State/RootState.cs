@@ -1,14 +1,13 @@
-﻿namespace OnboardingUI.Store.State
+﻿using JetBrains.Annotations;
+
+namespace OnboardingUI.Store.State;
+
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+public abstract class RootState(bool isLoading, string currentErrorMessage)
 {
-    public abstract class RootState
-    {
-        public RootState(bool isLoading, string currentErrorMessage) =>
-            (IsLoading, CurrentErrorMessage) = (isLoading, currentErrorMessage);
+    public bool IsLoading { get; } = isLoading;
 
-        public bool IsLoading { get; }
+    public string CurrentErrorMessage { get; } = currentErrorMessage;
 
-        public string CurrentErrorMessage { get; }
-
-        public bool HasCurrentErrors => !string.IsNullOrWhiteSpace(CurrentErrorMessage);
-    }
+    public bool HasCurrentErrors => !string.IsNullOrWhiteSpace(CurrentErrorMessage);
 }
