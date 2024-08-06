@@ -1,9 +1,21 @@
 ﻿@page "/"
+@using Fluxor
+@using OnboardingUI.Data.Services
+@using OnboardingUI.Domain.Entities
+@using System.Security.Principal
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <PageTitle>Index</PageTitle>
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">SECURA on-boarding dashboard</MudText>
 <MudText Align="Align.Center">Welcome to SECURA's on-boarding dashboard!</MudText>
+@if (!_bFirstTime)
+{
+    <br />
+    <MudText Typo="Typo.h6" Align="Align.Center">Your role is <MudTooltip Text="@adRole" Arrow="true" Placement="Placement.Right"><strong>@_decider.GetRoleValue(role)</strong></MudTooltip>.</MudText>
+    <MudText Typo="Typo.h6" Align="Align.Center">Your department is <MudTooltip Text="@adDepartment" Arrow="true" Placement="Placement.Right"><strong>@_decider.GetDepartmentValue(department)</strong></MudTooltip>.</MudText>
+    <br />
+    <MudText Align="Align.Center" Typo="Typo.body2">Hover over role and department to see Active directory values</MudText>
+}
 <MudGrid Class="mt-8">
     <MudItem xs="12" sm="12" md="12">
         <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">
@@ -20,7 +32,10 @@
             <MudChipSet @bind-SelectedChips="_selected" MultiSelection="true" Filter="IsFilter">
                 @foreach (var software in SoftwareState.Value.Software)
                 {
-                    <MudChip Text="@software.SoftwareName"/>
+                    if (software.Role <= role && (software.Department == department || software.Department == (int)DepartmentAndRoleDecider.Department.All))
+                    {
+                        <MudChip Text="@software.SoftwareName"/>
+                    }
                 }
             </MudChipSet>
         }

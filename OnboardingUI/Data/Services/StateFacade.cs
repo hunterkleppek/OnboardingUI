@@ -10,10 +10,8 @@ public record StateFacade
 {
     private readonly IDispatcher _dispatcher;
 
-    public StateFacade(IDispatcher dispatcher)
-    {
-        _dispatcher = dispatcher;
-    }
+    public StateFacade(IDispatcher dispatcher) =>
+       ( _dispatcher) = (dispatcher);
 
     public void GetSoftware(List<SoftwareClass>? softwareList)
     {

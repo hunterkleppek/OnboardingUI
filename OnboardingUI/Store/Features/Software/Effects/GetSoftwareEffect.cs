@@ -6,9 +6,10 @@ using OnboardingUI.Store.Features.Software.Actions;
 namespace OnboardingUI.Store.Features.Software.Effects;
 
 [UsedImplicitly]
-public class GetSoftwareEffect(SoftwareList stuffList) : Effect<GetSoftwareAction>
+public class GetSoftwareEffect(EnterpriseSoftwareList stuffList) : Effect<GetSoftwareAction>
 {
-    public override async Task HandleAsync(GetSoftwareAction action, IDispatcher dispatcher)
+
+    public override Task HandleAsync(GetSoftwareAction action, IDispatcher dispatcher)
     {
         try
         {
@@ -20,6 +21,6 @@ public class GetSoftwareEffect(SoftwareList stuffList) : Effect<GetSoftwareActio
             dispatcher.Dispatch(new GetSoftwareFailureAction(ex.Message));
         }
 
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 }
