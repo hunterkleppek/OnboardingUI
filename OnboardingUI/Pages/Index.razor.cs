@@ -24,7 +24,8 @@ public partial class Index
     [Inject] private IConfiguration? Configuration { get; set; }
     [Inject] public IJSRuntime? JsRuntime { get; set; }
     [Inject] private IDispatcher? Dispatcher { get; set; }
-        
+
+    private const bool IsFilter = true;
     private MudChip[]? _selected;
 
     private string? _fileName;
