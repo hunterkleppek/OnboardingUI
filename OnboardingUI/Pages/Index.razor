@@ -17,7 +17,7 @@
     <MudText Align="Align.Center" Typo="Typo.body2">Hover over role and department to see Active directory values</MudText>
 }
 <MudGrid Class="mt-8">
-    <MudItem xs="12" sm="12" md="6">
+    <MudItem xs="12" sm="12" md="8">
         <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">
             <MudButton @onclick="NavigateToChecklist">Onboarding Checklist</MudButton>
             <MudButton @onclick="NavigateToAdTickets">Ticket(s) to Submit</MudButton>
@@ -29,7 +29,7 @@
     <MudItem xs="12" sm="12" md="3">
         <MudTextField T="string" Label="Enter your username ex:hi01234" @bind-Value="_username" ></MudTextField>
     </MudItem>
-    <MudItem xs="12" sm="12" md="3">
+    <MudItem xs="12" sm="12" md="1">
         <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="() => SetUsername(_username)" >Set Username</MudButton>
     </MudItem>
     <MudItem xs="12" sm="12" md="12">
