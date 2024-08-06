@@ -8,4 +8,5 @@ public class PopulateSoftwareState(bool isLoading, string currentErrorMessage)
     public List<SoftwareClass>? Software { get; set; }
     public int Role { get; set; }
     public int Department { get; set; }
+    public string Username { get; set; }
 }
