@@ -19,7 +19,6 @@ namespace OnboardingUI.Pages;
 [UsedImplicitly]
 public partial class Index
 {
-    [Inject] private ILogger<Index>? Logger { get; set; }
     [Inject] private ISnackbar? SnackBar { get; set; }
     [Inject] private IState<PopulateSoftwareState>? SoftwareState { get; set; }
     [Inject] private IConfiguration? Configuration { get; set; }
@@ -29,12 +28,10 @@ public partial class Index
     private MudChip[]? _selected;
 
     private string? _fileName;
-    private string? _btnFileName;
 
     private bool _bFirstTime = true;
     private string? _commands;
 
-    private readonly bool _filter = true;
     private bool _bGotSoftware = true;
     private bool _bGenerated = true;
 
@@ -98,7 +95,6 @@ public partial class Index
 
                 GeneratePowerShellFileDownload(softwareList);
                 SnackBar?.Add("Your Onboarding folder is ready to be downloaded");
-                _btnFileName = "OnboardingScript.bat";
                 if (_bGenerated)
                     _bGenerated = !_bGenerated;
             }
@@ -164,30 +160,27 @@ public partial class Index
 
     public void GetCurrentListOfChocoSoftware()
     {
-        using (PowerShell PowerShellInstance = PowerShell.Create())
+        using var powerShellInstance = PowerShell.Create();
+        var filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\MySoftware.config";
+        // Create a new process start info
+        var startInfo = new ProcessStartInfo
         {
-            var filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\MySoftware.config";
-            // Create a new process start info
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "powershell.exe",
-                Verb = "runas", // This will run the process as admin
-                Arguments = $"choco export -o={filePath} --include-version-numbers",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
-            };
+            FileName = "powershell.exe",
+            Verb = "runas", // This will run the process as admin
+            Arguments = $"choco export -o={filePath} --include-version-numbers",
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            CreateNoWindow = true
+        };
 
-            // Start the process
-            var process = new Process { StartInfo = startInfo };
-            process.Start();
+        // Start the process
+        var process = new Process { StartInfo = startInfo };
+        process.Start();
 
-            // Wait for the process to exit
-            process.WaitForExit();
+        // Wait for the process to exit
+        process.WaitForExit();
 
-            SnackBar?.Add("Your current list of software has been exported to your Downloads folder");
-
-        }
+        SnackBar?.Add("Your current list of software has been exported to your Downloads folder");
     }
 
     public void GenerateFile(string fileName, string fileExtension, string saveLocationPath, string? fileContent)
@@ -207,7 +200,7 @@ public partial class Index
         }
 
         // Read the file
-        string script = File.ReadAllText(filePath);
+        var script = File.ReadAllText(filePath);
 
         var startInfo = new ProcessStartInfo
         {

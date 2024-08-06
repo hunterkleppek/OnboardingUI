@@ -9,5 +9,5 @@ public class PopulateSoftwareFeature : Feature<PopulateSoftwareState>
 {
     public override string GetName() => "Softwares";
     protected override PopulateSoftwareState GetInitialState() =>
-        new (false, null);
+        new (false, "");
 }

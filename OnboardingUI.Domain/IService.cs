@@ -1,5 +1,3 @@
 ﻿namespace OnboardingUI.Domain;
 
-public interface IService
-{
-}
+public interface IService;

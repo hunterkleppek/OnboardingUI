@@ -2,11 +2,9 @@
 
 namespace OnboardingUI.Store.State;
 
-public class PopulateSoftwareState : RootState
+public class PopulateSoftwareState(bool isLoading, string currentErrorMessage)
+    : RootState(isLoading, currentErrorMessage)
 {
-    public PopulateSoftwareState(bool isLoading, string currentErrorMessage)
-        : base(isLoading, currentErrorMessage) { }
-
     public List<SoftwareClass>? Software { get; set; }
     public int Role { get; set; }
     public int Department { get; set; }

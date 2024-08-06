@@ -1,5 +1,3 @@
 ﻿namespace OnboardingUI.Domain;
 
-public interface IRepository
-{
-}
+public interface IRepository;
